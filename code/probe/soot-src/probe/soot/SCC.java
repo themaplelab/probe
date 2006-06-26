@@ -12,6 +12,7 @@ import probe.ProbeMethod;
 import probe.ProbeClass;
 
 public class SCC extends SceneTransformer {
+    /*
     static String filename = "SCC.gxl.gz";
     public static void main(String[] args) 
     {
@@ -34,8 +35,10 @@ public class SCC extends SceneTransformer {
 	soot.Main.main(args);
     }
 
+    */
     protected void internalTransform(String phaseName, Map options)
     {
+        /*
         System.out.println("running wjtp.scc");
         probe.CallGraph probecg = new probe.CallGraph();
         StronglyConnectedComponents scc = ZhuContext.savedScc;
@@ -66,7 +69,9 @@ public class SCC extends SceneTransformer {
         } catch (IOException ioe) {
             System.out.println("Error while writing to file: " + ioe);
         }
+        */
     }
+    /*
     private ProbeMethod probeMethod(SootMethod m) {
         SootClass cl = m.getDeclaringClass();
         ProbeClass cls = ObjectManager.v().getClass(cl.getPackageName(),
@@ -75,6 +80,7 @@ public class SCC extends SceneTransformer {
                 m.getName(), m.getBytecodeParms());
         return gm;
     }
+    */
 }
 
 
