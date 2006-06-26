@@ -1,0 +1,83 @@
+package probe.soot;
+import soot.*;
+import soot.tagkit.*;
+import java.util.*;
+import java.io.*;
+import soot.jimple.*;
+import soot.util.queue.*;
+import soot.jimple.paddle.*;
+import probe.ObjectManager;
+import probe.ProbeStmt;
+import probe.ProbeMethod;
+import probe.ProbeClass;
+import probe.GXLWriter;
+
+public class ExecutesMany extends SceneTransformer {
+    static String filename = "ExecutesMany.gxl";
+    public static void main(String[] args) 
+    {
+	PackManager.v().getPack("wjtp").add(
+	    new Transform("wjtp.em", new ExecutesMany()));
+
+        LinkedList al = new LinkedList();
+        for( int i = 0; i < args.length; i++ ) {
+            if( args[i].equals("-dd") ) {
+                filename = args[++i];
+                continue;
+            }
+            al.add(args[i]);
+        }
+        args = new String[al.size()];
+        for( int i = 0; i < args.length; i++ ) {
+            args[i] = (String) al.removeFirst();
+        }
+	soot.Main.main(args);
+    }
+
+    protected void internalTransform(String phaseName, Map options)
+    {
+        System.out.println("running wjtp.probeem");
+        BDDExecutesManyAnalysis ema = new BDDExecutesManyAnalysis();
+        ema.analyze();
+
+        probe.ExecutesMany em = new probe.ExecutesMany();
+        for( Iterator clIt = Scene.v().getApplicationClasses().iterator(); clIt.hasNext(); ) {
+            final SootClass cl = (SootClass) clIt.next();
+            for( Iterator mIt = cl.getMethods().iterator(); mIt.hasNext(); ) {
+                final SootMethod m = (SootMethod) mIt.next();
+                if( !m.hasActiveBody() ) continue;
+                for( Iterator sIt = m.getActiveBody().getUnits().iterator(); sIt.hasNext(); ) {
+                    final Stmt s = (Stmt) sIt.next();
+                    if(!s.hasTag("BytecodeOffsetTag")) continue;
+                    if( ema.executesMany(s) ) {
+                        em.stmts().add( probeStmt( m, s ) );
+                    }
+                }
+            }
+        }
+
+        try {
+            new GXLWriter().write(em, new FileOutputStream(new File(
+                            filename)));
+        } catch (IOException ioe) {
+            System.out.println("Error while writing to file: " + ioe);
+        }
+    }
+    private ProbeStmt probeStmt(SootMethod m, Stmt s) {
+        if( !s.hasTag("BytecodeOffsetTag") ) 
+            throw new RuntimeException( "The statement "+s+
+                    " in method "+m+" has no BytecodeOffsetTag." );
+        BytecodeOffsetTag tag = (BytecodeOffsetTag) 
+            s.getTag("BytecodeOffsetTag");
+        return ObjectManager.v().getStmt(probeMethod(m), tag.getBytecodeOffset());
+    }
+    private ProbeMethod probeMethod(SootMethod m) {
+        SootClass cl = m.getDeclaringClass();
+        ProbeClass cls = ObjectManager.v().getClass(cl.getPackageName(),
+                cl.getShortName());
+        ProbeMethod gm = ObjectManager.v().getMethod(cls,
+                m.getName(), m.getBytecodeParms());
+        return gm;
+    }
+}
+

@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<project default="compile-all">
+    <property file="ant.settings"/>
+    <target name="settings">
+        <fail
+            message="Please copy ant.settings.template to ant.settings, and set the variables in it."
+            unless="gxl.jar"
+        />
+    </target>
+    <target name="compile-all" depends="compile,compile-soot,compile-starj"/>
+    <target name="compile" depends="settings">
+        <javac destdir="classes" classpath="${gxl.jar}" debug="true">
+            <src path="src"/>
+        </javac>
+    </target>
+    <target name="compile-soot" depends="settings">
+        <javac destdir="classes" classpath="${gxl.jar}:${soot.jar}:${paddle.jar}" debug="true">
+            <src path="soot-src"/>
+        </javac>
+    </target>
+    <target name="compile-starj" depends="settings">
+        <javac destdir="classes" classpath="${gxl.jar}:${starj.jar}" debug="true">
+            <src path="starj-src"/>
+        </javac>
+    </target>
+    <target name="clean">
+        <delete quiet="true">
+            <fileset dir="classes" includes="**/*.class"/>
+        </delete>
+    </target>
+    <target name="javadoc">
+        <javadoc
+            classpath="classes:${gxl.jar}"
+            sourcepath="src"
+            destdir="doc/javadoc"
+        >
+            <fileset dir="src" includes="**/*.java"/>
+        </javadoc>
+    </target>
+</project>
+
