@@ -75,6 +75,7 @@ public class FailCast extends AbstractPrinter {
                 {
                     InstructionStartEvent e = (InstructionStartEvent) event;
                     Instruction i = e.getInstruction();
+                    if( i == null ) break;
                     int opcode = i.getOpcode();
                     Integer lastOffset = (Integer) envToOffset.get(e.getEnvID());
                     if( lastOffset != null ) {
