@@ -55,7 +55,7 @@ stmt:
                     Value rhs = as.getRightOp();
                     if( !(rhs instanceof CastExpr) ) continue;
                     CastExpr ce = (CastExpr) rhs;
-                    if(s.hasTag("BytecodeOffsetTag")) fc.anyCast().add(probeStmt(m, s));
+                    if(s.hasTag("BytecodeOffsetTag")) fc.executes().add(probeStmt(m, s));
                     totalCasts++;
                     Value opv = ce.getOp();
                     if(!(opv instanceof Local)) continue;

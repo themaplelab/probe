@@ -100,7 +100,7 @@ public class EdgeWeights implements AbsEdgeWeights {
             }
         } );
         for( Iterator edgeIt = supergraph.edges().iterator(); edgeIt.hasNext(); ) {
-            final Edge edge = (Edge) edgeIt.next();
+            final CallEdge edge = (CallEdge) edgeIt.next();
             FlowEdge fe;
             addMethod(edge.dst());
             addMethod(edge.src());
@@ -166,7 +166,7 @@ public class EdgeWeights implements AbsEdgeWeights {
         FlowEdge fe = find(n(m), 0);
         return fe.cumulative;
     }
-    public double weight(Edge e) {
+    public double weight(CallEdge e) {
         FlowEdge fe;
         fe = find(n(e.dst()), n(e.src()));
         return fe.cumulative;

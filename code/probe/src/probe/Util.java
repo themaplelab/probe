@@ -28,8 +28,8 @@ public class Util {
         for( Iterator itemIt = items.iterator(); itemIt.hasNext(); ) {
             final Object item = (Object) itemIt.next();
             Object newItem = item;
-            if( newItem instanceof Edge ) {
-                newItem = ((Edge) newItem).src();
+            if( newItem instanceof CallEdge ) {
+                newItem = ((CallEdge) newItem).src();
             }
             if( newItem instanceof ProbeStmt ) {
                 newItem = ((ProbeStmt) newItem).method();

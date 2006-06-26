@@ -73,10 +73,10 @@ public class URIs {
     public URI escapesMethod() { return escapesMethod; }
     private URI anyAlloc;
     public URI anyAlloc() { return anyAlloc; }
-    private URI anyCast;
-    public URI anyCast() { return anyCast; }
-    private URI mayFail;
-    public URI mayFail() { return mayFail; }
+    private URI executes;
+    public URI executes() { return executes; }
+    private URI fails;
+    public URI fails() { return fails; }
 
     public URIs( String path ) {
         this.path = path;
@@ -112,8 +112,8 @@ public class URIs {
             escapesThread = new URI( scheme, host, path, "escapesThread" );
             escapesMethod = new URI( scheme, host, path, "escapesMethod" );
             anyAlloc = new URI( scheme, host, path, "anyAlloc" );
-            anyCast = new URI( scheme, host, path, "anyCast" );
-            mayFail = new URI( scheme, host, path, "mayFail" );
+            executes = new URI( scheme, host, path, "executes" );
+            fails = new URI( scheme, host, path, "fails" );
         } catch( URISyntaxException e ) {
             throw new RuntimeException("Caught URISyntaxException: "+e);
         }

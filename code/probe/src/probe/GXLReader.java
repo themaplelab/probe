@@ -24,12 +24,12 @@ public class GXLReader {
         for( Iterator edgeIt = callEdges.iterator(); edgeIt.hasNext(); ) {
             final GXLEdge edge = (GXLEdge) edgeIt.next();
             if( hasAttr(edge, "weight") ) {
-                ret.edges().add( new Edge(
+                ret.edges().add( new CallEdge(
                     (ProbeMethod) nodeToMethod.get(edge.getSource()),
                     (ProbeMethod) nodeToMethod.get(edge.getTarget()),
                     getDouble(edge, "weight")));
             } else {
-                ret.edges().add( new Edge(
+                ret.edges().add( new CallEdge(
                     (ProbeMethod) nodeToMethod.get(edge.getSource()),
                     (ProbeMethod) nodeToMethod.get(edge.getTarget())));
             }
@@ -109,14 +109,14 @@ public class GXLReader {
 
         FailCast ret = new FailCast();
 
-        for( Iterator nodeIt = mayFail.iterator(); nodeIt.hasNext(); ) {
+        for( Iterator nodeIt = fails.iterator(); nodeIt.hasNext(); ) {
 
             final GXLNode node = (GXLNode) nodeIt.next();
             ret.stmts().add( nodeToStmt.get(node) );
         }
-        for( Iterator nodeIt = anyCast.iterator(); nodeIt.hasNext(); ) {
+        for( Iterator nodeIt = executes.iterator(); nodeIt.hasNext(); ) {
             final GXLNode node = (GXLNode) nodeIt.next();
-            ret.anyCast().add( nodeToStmt.get(node) );
+            ret.executes().add( nodeToStmt.get(node) );
         }
 
         return ret;
@@ -264,8 +264,8 @@ public class GXLReader {
 
     private List entryPoints = new ArrayList();
     private List callEdges = new ArrayList();
-    private List mayFail = new ArrayList();
-    private List anyCast = new ArrayList();
+    private List fails = new ArrayList();
+    private List executes = new ArrayList();
     private List escapesThread = new ArrayList();
     private List escapesMethod = new ArrayList();
     private List anyAlloc = new ArrayList();
@@ -298,10 +298,10 @@ public class GXLReader {
                 anyAlloc.add(dst);
             } else if( edge.getType().getURI().equals( uri.escapesMethod() ) ) {
                 escapesMethod.add(dst);
-            } else if( edge.getType().getURI().equals( uri.mayFail() ) ) {
-                mayFail.add(dst);
-            } else if( edge.getType().getURI().equals( uri.anyCast() ) ) {
-                anyCast.add(dst);
+            } else if( edge.getType().getURI().equals( uri.fails() ) ) {
+                fails.add(dst);
+            } else if( edge.getType().getURI().equals( uri.executes() ) ) {
+                executes.add(dst);
             } else if( edge.getType().getURI().equals( uri.calls() ) ) {
                 callEdges.add(edge);
             } else if( edge.getType().getURI().equals( uri.inSet() ) ) {

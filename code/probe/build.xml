@@ -31,6 +31,8 @@
     <target name="clean">
         <delete quiet="true">
             <fileset dir="classes" includes="**/*.class"/>
+            <fileset dir="lib" includes="**/*.jar"/>
+            <fileset dir="." includes="probe-all.jar"/>
         </delete>
     </target>
     <target name="javadoc">
@@ -41,6 +43,16 @@
         >
             <fileset dir="src" includes="**/*.java"/>
         </javadoc>
+    </target>
+    <target name="jar" depends="compile-all">
+        <jar destfile="lib/probe.jar">
+            <fileset dir="classes"/>
+        </jar>
+    </target>
+    <target name="release" depends="jar,javadoc">
+        <jar destfile="probe-all.jar">
+            <fileset dir="." excludes="probe-all.jar"/>
+        </jar>
     </target>
 </project>
 

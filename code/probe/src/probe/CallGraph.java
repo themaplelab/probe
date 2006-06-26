@@ -9,7 +9,7 @@ public class CallGraph {
         return entryPoints;
     }
     /** @return The (mutable) set of call edges in the call graph. */
-    public Set/*Edge*/ edges() {
+    public Set/*CallEdge*/ edges() {
         return edges;
     }
 
@@ -20,7 +20,7 @@ public class CallGraph {
         while(true) {
             Set newReachables = new HashSet();
             for( Iterator eIt = edges().iterator(); eIt.hasNext(); ) {
-                final Edge e = (Edge) eIt.next();
+                final CallEdge e = (CallEdge) eIt.next();
                 if(reachables.contains(e.src()) && !reachables.contains(e.dst())) {
                     newReachables.add(e.dst());
                 }

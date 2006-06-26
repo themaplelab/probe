@@ -139,7 +139,7 @@
             <attr name="limits">
             <tup>
                 <int>0</int>
-                <int>-1</int>
+                <int>1</int>
             </tup>
             </attr>
             <attr name="isordered">

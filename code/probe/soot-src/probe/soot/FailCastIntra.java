@@ -56,7 +56,7 @@ public class FailCastIntra extends SceneTransformer {
                     final Stmt s = (Stmt) sIt.next();
                     if( !s.hasTag("CastCheckTag") ) continue;
                     CastCheckTag tag = (CastCheckTag) s.getTag("CastCheckTag");
-                    if(s.hasTag("BytecodeOffsetTag")) fc.anyCast().add(probeStmt(m, s));
+                    if(s.hasTag("BytecodeOffsetTag")) fc.executes().add(probeStmt(m, s));
                     if( !tag.canEliminateCheck() ) {
                         if(s.hasTag("BytecodeOffsetTag")) fc.stmts().add(probeStmt(m, s));
                     }

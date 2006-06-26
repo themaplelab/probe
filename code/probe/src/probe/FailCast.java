@@ -11,16 +11,16 @@ public class FailCast {
         return stmts;
     }
 
-    /** @return The (mutable) set of ProbeStmt's representing any cast
-     * in the program.
+    /** @return The (mutable) set of ProbeStmt's representing all casts
+     * in the program that may be executed.
      */
-    public Set/*ProbeStmt*/ anyCast() {
-        return anyCast;
+    public Set/*ProbeStmt*/ executes() {
+        return executes;
     }
 
     /* End of public methods. */
 
     private Set stmts = new HashSet();
-    private Set anyCast = new HashSet();
+    private Set executes = new HashSet();
 }
 
