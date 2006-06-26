@@ -86,7 +86,8 @@ public class FailCast extends AbstractPrinter {
                         MethodEntity currentMethod = ic.getMethod();
                         int offset = e.getOffset();
                         ProbeStmt stmt = findStmt(offset, currentMethod);
-                        envToOffset.put(e.getEnvID(), new Integer(e.getOffset()));
+                        envToOffset.put(e.getEnvID(), new Integer(offset));
+                        eo.executes().add(findStmt(offset, currentMethod));
                     } else {
                         envToOffset.put(e.getEnvID(), null);
                     }
