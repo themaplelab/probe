@@ -52,11 +52,11 @@ public class FailCastInfo {
             }
         }
 
-        Collection anyCast = Util.filterLibs(libs, a.anyCast());
-        System.out.println( "Total casts : "+anyCast.size() );
+        Collection executes = Util.filterLibs(libs, a.executes());
+        System.out.println( "Total casts : "+executes.size() );
 
         if(dashA) {
-            for( Iterator sIt = anyCast.iterator(); sIt.hasNext(); ) {
+            for( Iterator sIt = executes.iterator(); sIt.hasNext(); ) {
                 final ProbeStmt s = (ProbeStmt) sIt.next();
                 System.out.println(s);
             }

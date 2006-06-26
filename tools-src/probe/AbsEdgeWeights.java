@@ -5,5 +5,5 @@ import java.util.*;
 
 public interface AbsEdgeWeights {
     public double weight(ProbeMethod pm);
-    public double weight(Edge fe);
+    public double weight(CallEdge fe);
 }

@@ -57,10 +57,10 @@
         EDGES
         -->
         
-        <node id="anyCast">
+        <node id="executes">
             <type xlink:href="http://www.gupro.de/GXL/gxl-1.0.gxl#EdgeClass"/>
             <attr name="name">
-                <string>anyCast</string>
+                <string>executes</string>
             </attr>
             <attr name="isabstract">
                 <bool>false</bool>
@@ -69,10 +69,10 @@
                 <bool>true</bool>
             </attr>
         </node>
-        <edge from="FailCast" to="anyCast">
+        <edge from="FailCast" to="executes">
             <type xlink:href="http://www.gupro.de/GXL/gxl-1.0.gxl#contains"/>
         </edge>
-        <edge from="anyCast" to="Root">
+        <edge from="executes" to="Root">
             <type xlink:href="http://www.gupro.de/GXL/gxl-1.0.gxl#from"/>
             <attr name="limits">
             <tup>
@@ -84,7 +84,7 @@
                 <bool>false</bool>
             </attr>
         </edge>
-        <edge from="anyCast" to="Stmt">
+        <edge from="executes" to="Stmt">
             <type xlink:href="http://www.gupro.de/GXL/gxl-1.0.gxl#to"/>
             <attr name="limits">
             <tup>
@@ -97,10 +97,10 @@
             </attr>
         </edge>
 
-        <node id="mayFail">
+        <node id="fails">
             <type xlink:href="http://www.gupro.de/GXL/gxl-1.0.gxl#EdgeClass"/>
             <attr name="name">
-                <string>mayFail</string>
+                <string>fails</string>
             </attr>
             <attr name="isabstract">
                 <bool>false</bool>
@@ -109,10 +109,10 @@
                 <bool>true</bool>
             </attr>
         </node>
-        <edge from="FailCast" to="mayFail">
+        <edge from="FailCast" to="fails">
             <type xlink:href="http://www.gupro.de/GXL/gxl-1.0.gxl#contains"/>
         </edge>
-        <edge from="mayFail" to="Root">
+        <edge from="fails" to="Root">
             <type xlink:href="http://www.gupro.de/GXL/gxl-1.0.gxl#from"/>
             <attr name="limits">
             <tup>
@@ -124,7 +124,7 @@
                 <bool>false</bool>
             </attr>
         </edge>
-        <edge from="mayFail" to="Stmt">
+        <edge from="fails" to="Stmt">
             <type xlink:href="http://www.gupro.de/GXL/gxl-1.0.gxl#to"/>
             <attr name="limits">
             <tup>

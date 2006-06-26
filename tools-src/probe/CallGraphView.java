@@ -40,7 +40,7 @@ public class CallGraphView extends Jui {
         }
         if( supergraph == null ) usage();
         for( Iterator eIt = supergraph.edges().iterator(); eIt.hasNext(); ) {
-            final Edge e = (Edge) eIt.next();
+            final CallEdge e = (CallEdge) eIt.next();
             addMethod( e.src() );
             addMethod( e.dst() );
         }
@@ -95,12 +95,12 @@ public class CallGraphView extends Jui {
             sb.append("</td></tr></table>");
         }
         for( Iterator eIt = supergraph.edges().iterator(); eIt.hasNext(); ) {
-            final Edge e = (Edge) eIt.next();
+            final CallEdge e = (CallEdge) eIt.next();
             if( e.dst().equals(m) ) sb.append(node(e.src()));
         }
         sb.append( "</td><td width=\"50%\" valign=\"top\">" );
         for( Iterator eIt = supergraph.edges().iterator(); eIt.hasNext(); ) {
-            final Edge e = (Edge) eIt.next();
+            final CallEdge e = (CallEdge) eIt.next();
             if( e.src().equals(m) ) sb.append(node(e.dst()));
         }
         sb.append( "<td><tr>" );

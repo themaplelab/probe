@@ -17,7 +17,7 @@ public class GXLWriter {
             addMethod( m );
         }
         for( Iterator eIt = cg.edges().iterator(); eIt.hasNext(); ) {
-            final Edge e = (Edge) eIt.next();
+            final CallEdge e = (CallEdge) eIt.next();
             addMethod( e.src() );
             addMethod( e.dst() );
         }
@@ -44,7 +44,7 @@ public class GXLWriter {
             graph.add( edge );
         }
         for( Iterator eIt = cg.edges().iterator(); eIt.hasNext(); ) {
-            final Edge e = (Edge) eIt.next();
+            final CallEdge e = (CallEdge) eIt.next();
             GXLEdge edge = new GXLEdge( getId(e.src()), getId(e.dst()) );
             edge.setType(uri.calls());
             if(e.weight() != 0.0) {
@@ -152,7 +152,7 @@ public class GXLWriter {
             final ProbeStmt s = (ProbeStmt) sIt.next();
             addStmt( s );
         }
-        for( Iterator sIt = fc.anyCast().iterator(); sIt.hasNext(); ) {
+        for( Iterator sIt = fc.executes().iterator(); sIt.hasNext(); ) {
             final ProbeStmt s = (ProbeStmt) sIt.next();
             addStmt( s );
         }
@@ -173,13 +173,13 @@ public class GXLWriter {
         for( Iterator stmtIt = fc.stmts().iterator(); stmtIt.hasNext(); ) {
             final ProbeStmt stmt = (ProbeStmt) stmtIt.next();
             GXLEdge edge = new GXLEdge( "root", getId(stmt) );
-            edge.setType(uri.mayFail());
+            edge.setType(uri.fails());
             graph.add( edge );
         }
-        for( Iterator stmtIt = fc.anyCast().iterator(); stmtIt.hasNext(); ) {
+        for( Iterator stmtIt = fc.executes().iterator(); stmtIt.hasNext(); ) {
             final ProbeStmt stmt = (ProbeStmt) stmtIt.next();
             GXLEdge edge = new GXLEdge( "root", getId(stmt) );
-            edge.setType(uri.anyCast());
+            edge.setType(uri.executes());
             graph.add( edge );
         }
 

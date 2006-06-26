@@ -59,11 +59,11 @@ public class CallGraphDiff {
 
         if( dashP ) {
             for( Iterator edgeIt = supergraph.edges().iterator(); edgeIt.hasNext(); ) {
-                final Edge edge = (Edge) edgeIt.next();
+                final CallEdge edge = (CallEdge) edgeIt.next();
                 if( edge.src().name().equals("doPrivileged") ) edgeIt.remove();
             }
             for( Iterator edgeIt = subgraph.edges().iterator(); edgeIt.hasNext(); ) {
-                final Edge edge = (Edge) edgeIt.next();
+                final CallEdge edge = (CallEdge) edgeIt.next();
                 if( edge.src().name().equals("doPrivileged") ) edgeIt.remove();
             }
         }
@@ -107,8 +107,8 @@ public class CallGraphDiff {
             final AbsEdgeWeights weightsF = weights;
             TreeSet ts = new TreeSet(new Comparator() {
                 public int compare(Object o1, Object o2) {
-                    Edge pm1 = (Edge) o1;
-                    Edge pm2 = (Edge) o2;
+                    CallEdge pm1 = (CallEdge) o1;
+                    CallEdge pm2 = (CallEdge) o2;
                     if( weightsF.weight(pm1) < weightsF.weight(pm2) ) return -1;
                     if( weightsF.weight(pm1) > weightsF.weight(pm2) ) return 1;
                     return 0;
@@ -116,12 +116,12 @@ public class CallGraphDiff {
             });
             ts.addAll( diff.edges() );
             for( Iterator mIt = ts.iterator(); mIt.hasNext(); ) {
-                final Edge m = (Edge) mIt.next();
+                final CallEdge m = (CallEdge) mIt.next();
                 System.out.println( weights.weight(m)+" "+m );
             }
         } else {
             for( Iterator mIt = diff.edges().iterator(); mIt.hasNext(); ) {
-                final Edge m = (Edge) mIt.next();
+                final CallEdge m = (CallEdge) mIt.next();
                 System.out.println( m.toString() );
             }
         }
@@ -160,7 +160,7 @@ public class CallGraphDiff {
         ret.edges().removeAll( subgraph.edges() );
         Iterator it = ret.edges().iterator();
         while(it.hasNext()) {
-            Edge e = (Edge) it.next();
+            CallEdge e = (CallEdge) it.next();
             if( (!dashA && !reachables.contains(e.src()))
             || (dashE && subgraph.entryPoints().contains(e.dst()))
             || (dashR && reachables.contains(e.dst())) )

@@ -47,7 +47,7 @@ public class CallGraph extends SceneTransformer {
                 (soot.jimple.toolkits.callgraph.Edge) it.next();
             sources.add( e.src() );
             targets.add( e.tgt() );
-            probecg.edges().add( new probe.Edge(
+            probecg.edges().add( new probe.CallEdge(
                         probeMethod(e.src()), probeMethod(e.tgt())));
             if( e.kind() == Kind.NEWINSTANCE ) {
                 ProbeMethod newInstance = ObjectManager.v().getMethod(
@@ -55,10 +55,10 @@ public class CallGraph extends SceneTransformer {
                         "newInstance0",
                         ""
                 );
-                probecg.edges().add(new probe.Edge(newInstance, probeMethod(e.tgt())));
+                probecg.edges().add(new probe.CallEdge(newInstance, probeMethod(e.tgt())));
             } else if( e.kind() == Kind.PRIVILEGED ) {
                 ProbeMethod doPriv = probeMethod(e.srcStmt().getInvokeExpr().getMethod());
-                probecg.edges().add(new probe.Edge(doPriv, probeMethod(e.tgt())));
+                probecg.edges().add(new probe.CallEdge(doPriv, probeMethod(e.tgt())));
             }
         }
 

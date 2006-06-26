@@ -1,0 +1,98 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>
+ProBe: Data formats for recording Program Behaviour
+</title>
+</head>
+<h1>
+ProBe: Data formats for recording Program Behaviour
+</h1>
+<h2>Introduction</h2>
+
+<p>
+During an open discussion session at 
+<a href="http://www.st.cs.uni-sb.de/paste/">PASTE 2004</a>,
+one issue discussed was that researchers working on
+program analysis tools (both static and dynamic) too rarely compare
+their actual analysis results to those produced by other tools.
+Such comparisons are difficult because published results rarely
+include complete program analysis results. Even when the tools
+are available, different tools often use very different
+representations of programs being analyzed, making it difficult
+to compare their results.
+</P>
+
+<p>
+ProBe is an attempt to begin to change this unfortunate state,
+and make it easier to both report and compare results of different
+program analysis tools. The motivation for ProBe came from an
+e-mail exchange between
+<a href="http://plg.uwaterloo.ca/~olhotak/">Ond&#345;ej Lhot&aacute;k</a>,
+<a href="http://www.cse.ohio-state.edu/~rountev/">Nasko Rountev</a>, and
+<a href="http://www.mcs.vuw.ac.nz/~djp/">David J. Pearce</a>.
+We agreed that the following were needed:
+<ul>
+<li>standard data formats for recording analysis results,
+independent of any particular tool
+<li>a library to make it easy for analysis tools to produce output in the formats
+<li>tools for analyzing, visualizing, and comparing analysis results recorded
+in the formats
+</ul>
+</p>
+
+<p>ProBe, then, is a prototype implementation of the above requirements.
+Specifically, ProBe consists of a collection of data formats for
+results of several common program analyses for Java, and tools for writing
+and reading/analyzing the analysis results. Of course, in order to become
+standard, a data format must be accepted by the community interested in
+a particular program analysis, and this undoubtedly requires discussion
+within the community. Thus, the existing data formats are not intended
+to be definitive; rather, they are intended as starting points for such
+discussions. That said, code is already available for generating analysis
+results in the formats from <a href="http://www.sable.mcgill.ca/soot/">Soot</a>
+and <a href="http://www.sable.mcgill.ca/starj/">*J</a>. All of the formats
+come with simple analysis tools, and the Call Graph format in particular
+comes with a more comprehensive collection of analysis tools.
+</p>
+
+<h2>Data Formats</h2>
+<ul>
+<li><a href="schemas/callgraph.html">call graph</a>
+<li><a href="schemas/polymorphic.html">polymorphic call sites</a>
+<li><a href="schemas/pointsto.html">points-to information</a>
+<li><a href="schemas/failcast.html">cast safety</a>
+<li><a href="schemas/sideeffect.html">side effect information</a>
+</ul>
+
+<h2>Library</h2>
+The Java library is intended to be used in program analysis
+tools to generate output in the ProBe formats, and in evaluation
+tools to read the ProBe formats.
+<a href="doc/javadoc/index.html">Javadoc documentation</a> is available.
+
+<h2>Analysis/Evaluation Tools</h2>
+Analysis and evaluation tools are specific to each individual data format,
+and are listed on the web page for their data format. See above
+for the links to the data formats.
+
+<h2>Download</h2>
+ProBe is developed in a publicly readable Subversion repository at:
+
+<pre>https://svn.sable.mcgill.ca/soot/probe/</pre>
+
+The ProBe build process generates a <a href="lib/probe.jar">Jar file</a>
+containing the Java classes of the ProBe library and tools.
+
+A <a href="http://www.sable.mcgill.ca/~olhota/build/probe-all.jar">nightly
+build</a> containing all of ProBe is available.
+
+<hr>
+<p>
+      <a href="http://validator.w3.org/check?uri=referer"><img border="0"
+          src="http://www.w3.org/Icons/valid-html401"
+          alt="Valid HTML 4.01!" height="31" width="88"></a>
+    </p>
+</html>
+

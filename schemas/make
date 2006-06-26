@@ -1,2 +1,3 @@
 #!/bin/sh
-for i in *.gxl; do java olhotak.GXL2Dot < $i | dot -Tps > ${i/gxl/ps}; done
+for i in *.gxl; do java probe.GXL2Dot < $i | dot -Tps > ${i/gxl/ps}; done
+for i in *.gxl; do java probe.GXL2Dot < $i | dot -Tpng > ${i/gxl/png}; done

@@ -107,11 +107,22 @@ public class CallGraph extends AbstractPrinter {
                         System.out.println( "Stack is empty when exiting method "+me );
                         break;
                     }
-                    MethodEntity top = (MethodEntity) stack.removeLast();
-                    if( !top.equals( me ) ) {
-                        System.out.println( "Stack is "+stack );
-                        throw new RuntimeException( "Exiting method "+me+
-                                " but top of stack is "+top );
+                    MethodEntity top = (MethodEntity) stack.getLast();
+                    if( top.equals(me) ) {
+                        stack.removeLast();
+                    } else {
+                        // Sometimes JVMPI is broken and the stack gets 
+                        // messed up. If the current method is nowhere
+                        // on the stack, just ignore it. It it is on
+                        // the stack, just chop off the stack at the current
+                        // method.
+                        System.out.println( "Exiting method "+me+" but stack is "+stack );
+                        int i = stack.lastIndexOf(me);
+                        if(i>=0) {
+                            while(stack.size()>i) {
+                                stack.removeLast();
+                            }
+                        }
                     }
                 }
                 break;
@@ -129,7 +140,7 @@ public class CallGraph extends AbstractPrinter {
             ProbeMethod probeSrc = findMethod(src);
             for( Iterator tgtIt = targets.iterator(); tgtIt.hasNext(); ) {
                 final MethodEntity tgt = (MethodEntity) tgtIt.next();
-                cg.edges().add( new probe.Edge( probeSrc, findMethod(tgt) ) );
+                cg.edges().add( new probe.CallEdge( probeSrc, findMethod(tgt) ) );
             }
         }
         for( Iterator meIt = entryPoints.iterator(); meIt.hasNext(); ) {

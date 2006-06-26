@@ -82,7 +82,7 @@ public class CallGraphBFS {
         while(!queue.isEmpty()) {
             ProbeMethod m = (ProbeMethod) queue.removeFirst();
             for( Iterator eIt = a.edges().iterator(); eIt.hasNext(); ) {
-                final Edge e = (Edge) eIt.next();
+                final CallEdge e = (CallEdge) eIt.next();
                 if( e.src() != m ) continue;
                 ProbeMethod dst = e.dst();
                 if(ignoreMethods.contains(dst)) continue;
