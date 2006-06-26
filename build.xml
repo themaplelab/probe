@@ -7,10 +7,15 @@
             unless="gxl.jar"
         />
     </target>
-    <target name="compile-all" depends="compile,compile-soot,compile-starj"/>
+    <target name="compile-all" depends="compile,compile-tools,compile-soot,compile-starj"/>
     <target name="compile" depends="settings">
         <javac destdir="classes" classpath="${gxl.jar}" debug="true">
             <src path="src"/>
+        </javac>
+    </target>
+    <target name="compile-tools" depends="settings">
+        <javac destdir="classes" classpath="${gxl.jar}" debug="true">
+            <src path="tools-src"/>
         </javac>
     </target>
     <target name="compile-soot" depends="settings">

@@ -7,7 +7,7 @@ import net.sourceforge.gxl.*;
 public class GXLReader {
     /** Read a call graph from a GXL file. */
     public CallGraph readCallGraph( InputStream file ) throws IOException {
-        uri = new URIs( "/~olhota/callgraph.gxl" );
+        uri = new URIs( "/~olhotak/probe/schemas/callgraph.gxl" );
         getGraph(file, "callgraph");
         readNodesEdges();
         sortNodes();
@@ -40,7 +40,7 @@ public class GXLReader {
 
     /** Read a set of recursive methods from a GXL file. */
     public Recursive readRecursive( InputStream file ) throws IOException {
-        uri = new URIs( "/~olhota/recursive.gxl" );
+        uri = new URIs( "/~olhotak/probe/schemas/recursive.gxl" );
         getGraph(file, "recursive");
         readNodesEdges();
         sortNodes();
@@ -60,7 +60,7 @@ public class GXLReader {
 
     /** Read a set of allocation sites that execute more than once. */
     public ExecutesMany readExecutesMany( InputStream file ) throws IOException {
-        uri = new URIs( "/~olhota/executesmany.gxl" );
+        uri = new URIs( "/~olhotak/probe/schemas/executesmany.gxl" );
         getGraph(file, "executesmany");
         readNodesEdges();
         sortNodes();
@@ -80,7 +80,7 @@ public class GXLReader {
 
     /** Read a set of allocation sites that execute more than once. */
     public Polymorphic readPolymorphic( InputStream file ) throws IOException {
-        uri = new URIs( "/~olhota/polymorphic.gxl" );
+        uri = new URIs( "/~olhotak/probe/schemas/polymorphic.gxl" );
         getGraph(file, "polymorphic");
         readNodesEdges();
         sortNodes();
@@ -100,7 +100,7 @@ public class GXLReader {
 
     /** Read a set of cast instructions that fail. */
     public FailCast readFailCast( InputStream file ) throws IOException {
-        uri = new URIs( "/~olhota/failcast.gxl" );
+        uri = new URIs( "/~olhotak/probe/schemas/failcast.gxl" );
         getGraph(file, "failcast");
         readNodesEdges();
         sortNodes();
@@ -125,7 +125,7 @@ public class GXLReader {
     /** Read a set of allocation sites whose objects escape their allocating
      * method/thread. */
     public Escape readEscape( InputStream file ) throws IOException {
-        uri = new URIs( "/~olhota/escape.gxl" );
+        uri = new URIs( "/~olhotak/probe/schemas/escape.gxl" );
         getGraph(file, "escape");
         readNodesEdges();
         sortNodes();
@@ -153,7 +153,7 @@ public class GXLReader {
 
     /** Read points-to information. */
     public PointsTo readPointsTo( InputStream file ) throws IOException {
-        uri = new URIs( "/~olhota/pointsto.gxl" );
+        uri = new URIs( "/~olhotak/probe/schemas/pointsto.gxl" );
         getGraph(file, "pointsto");
         readNodesEdges();
         sortNodes();
@@ -178,7 +178,7 @@ public class GXLReader {
 
     /** Read side-effect information. */
     public SideEffect readSideEffect( InputStream file ) throws IOException {
-        uri = new URIs( "/~olhota/sideeffect.gxl" );
+        uri = new URIs( "/~olhotak/probe/schemas/sideeffect.gxl" );
         getGraph(file, "sideeffect");
         readNodesEdges();
         sortNodes();

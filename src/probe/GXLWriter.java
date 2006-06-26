@@ -8,7 +8,7 @@ import net.sourceforge.gxl.*;
 public class GXLWriter {
     /** Write a call graph to a GXL file. */
     public void write( CallGraph cg, OutputStream file ) throws IOException {
-        uri = new URIs( "/~olhota/callgraph.gxl" );
+        uri = new URIs( "/~olhotak/probe/schemas/callgraph.gxl" );
         initializeMaps();
 
         // Collect up all the methods and classes appearing in the call graph.
@@ -60,7 +60,7 @@ public class GXLWriter {
 
     /** Write a set of recursive methods to a GXL file. */
     public void write( Recursive rec, OutputStream file ) throws IOException {
-        uri = new URIs( "/~olhota/recursive.gxl" );
+        uri = new URIs( "/~olhotak/probe/schemas/recursive.gxl" );
         initializeMaps();
 
         // Collect up all the methods and classes appearing in the set.
@@ -88,7 +88,7 @@ public class GXLWriter {
     /** Write a set of allocation sites that may execute more than once to a
      * GXL file. */
     public void write( ExecutesMany eo, OutputStream file ) throws IOException {
-        uri = new URIs( "/~olhota/executesmany.gxl" );
+        uri = new URIs( "/~olhotak/probe/schemas/executesmany.gxl" );
         initializeMaps();
 
         // Collect up all the stmts, methods and classes appearing in the set.
@@ -116,7 +116,7 @@ public class GXLWriter {
 
     /** Write a set polymorphic invoke instructions to a GXL file. */
     public void write( Polymorphic eo, OutputStream file ) throws IOException {
-        uri = new URIs( "/~olhota/polymorphic.gxl" );
+        uri = new URIs( "/~olhotak/probe/schemas/polymorphic.gxl" );
         initializeMaps();
 
         // Collect up all the stmts, methods and classes appearing in the set.
@@ -144,7 +144,7 @@ public class GXLWriter {
 
     /** Write a set of cast instructions that fail to a GXL file. */
     public void write( FailCast fc, OutputStream file ) throws IOException {
-        uri = new URIs( "/~olhota/failcast.gxl" );
+        uri = new URIs( "/~olhotak/probe/schemas/failcast.gxl" );
         initializeMaps();
 
         // Collect up all the stmts, methods and classes appearing in the set.
@@ -195,7 +195,7 @@ public class GXLWriter {
     /** Write a set of allocation sites whose objects escape their allocating
      * thread/method to a GXL file. */
     public void write( Escape esc, OutputStream file ) throws IOException {
-        uri = new URIs( "/~olhota/escape.gxl" );
+        uri = new URIs( "/~olhotak/probe/schemas/escape.gxl" );
         initializeMaps();
 
         // Collect up all the stmts, methods and classes appearing in the sets.
@@ -255,7 +255,7 @@ public class GXLWriter {
 
     /** Write a points-to graph to a GXL file. */
     public void write( PointsTo ptGraph, OutputStream file ) throws IOException {
-        uri = new URIs( "/~olhota/pointsto.gxl" );
+        uri = new URIs( "/~olhotak/probe/schemas/pointsto.gxl" );
         initializeMaps();
 
         // Collect up all the stmts, methods and classes.
@@ -320,7 +320,7 @@ public class GXLWriter {
 
     /** Write side-effect information to a GXL file. */
     public void write( SideEffect sideEffect, OutputStream file ) throws IOException {
-        uri = new URIs( "/~olhota/sideeffect.gxl" );
+        uri = new URIs( "/~olhotak/probe/schemas/sideeffect.gxl" );
         System.out.println("initializeMaps");
         initializeMaps();
 

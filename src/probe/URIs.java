@@ -7,7 +7,7 @@ import net.sourceforge.gxl.*;
 /** Manages the GXL URIs of the various schemas. */
 public class URIs {
     final private String scheme = "http";
-    final private String host = "www.sable.mcgill.ca";
+    final private String host = "plg.uwaterloo.ca";
     private String path;
 
     // Graphs
