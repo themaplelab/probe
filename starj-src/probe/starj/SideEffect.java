@@ -140,6 +140,7 @@ public class SideEffect extends AbstractPrinter {
                 {
                     InstructionStartEvent e = (InstructionStartEvent) event;
                     Instruction i = e.getInstruction();
+                    if(i == null) break;
                     int thread = event.getEnvID();
                     int opcode = i.getOpcode();
                     envToInst.put(thread, stmt(e));
