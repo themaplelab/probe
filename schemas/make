@@ -1,0 +1,2 @@
+#!/bin/sh
+for i in *.gxl; do java olhotak.GXL2Dot < $i | dot -Tps > ${i/gxl/ps}; done
