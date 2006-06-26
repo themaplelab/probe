@@ -9,7 +9,88 @@ ProBe Call Graph Data Format
 <h1>
 <a href="../index.html">ProBe</a> Call Graph Data Format
 </h1>
+<h2>Specification</h2>
+<h3>Schema</h3>
 <img src="callgraph.png">
+<h3>Nodes</h3>
+<h4>Root</h4>
+Each call graph has a single Root node, which does not correspond
+to any element of the program. It is used as the starting point of
+entryPoint edges. The Root node has no attributes.
+
+<h4>Method</h4>
+Each Method node represents a method in the program. The name attribute
+specifies the name of the method. The signature attribute specifies the
+parameters and return type (but not the name) of the method in the same
+format as they are stored in the a Method Descriptor in the Java class
+file format (see <a href="http://java.sun.com/docs/books/vmspec/">The
+Java Virtual Machine Specification</a>, section 4.3.3).
+
+<h4>Class</h4>
+Each Class node represents a class in the program. The name attribute
+specifies the name of the class, not including the package. For inner
+classes, the name is determined as in the Java class file is used (i.e.
+the name may contain $ signs). The package attribute specifies the
+package in which the class is defined, with subpackages separated
+by a period.
+
+<h3>Edges</h3>
+<h4>declaredIn</h4>
+Each Method node has exactly one declaredIn edge to the Class node
+corresponding to the class in which the method is declared.
+<h4>entryPoint</h4>
+Each method that executes without having been called from
+any other method (i.e. it appears as the bottom-most method on the call stack
+of some thread) has an entryPoint edge leading to it from the Root node.
+<h4>calls</h4>
+Whenever method a calls method b (i.e. b appears just above a on a call
+stack), a calls edge appears from the Method node of a to the Method node of b.
+<h2>Tools</h2>
+<h3>CallGraphInfo</h3>
+The CallGraphInfo tool computes summary statistics about the number of
+entry points, reachable methods, and edges in the call graph.
+Optionally, it also lists reachable methods and entry points.
+<pre>
+Usage: java probe.CallGraphInfo [options] graph.gxl
+  -m : print list of reachable methods
+  -e : print list of entry points
+  -lib file : ignore methods in packages listed in file
+</pre>
+<h3>CallGraphView</h3>
+The CallGrahView tool is a web server that allows interactive navigation
+of the call graph. Each web page served corresponds to a single method,
+and contains links to all methods calling and called by it. The search
+box is used to search for a method or class by name. If two call graphs
+are given as parameters, the tool browses the first graph, but presents 
+methods not reachable in the second graph in a different colour (blue rather
+than pink).
+<pre>
+Usage: java probe.CallGraphView [options] supergraph.gxl [subgraph.gxl]
+  -port p: listen on port p (default: 8088)
+</pre>
+<h3>CallGraphDiff</h3>
+The CallGraphDiff tool finds reachable methods and edges present in the first
+graph specified, but absent in the second graph specified.
+<pre>
+Usage: java probe.CallGraphDiff [options] supergraph.gxl subgraph.gxl
+  -e : ignore edges in supergraph whose targets are entry points in subgraph
+  -r : ignore edges in supergraph whose targets are reachable in subgraph
+  -f : perform flow computation to rank edges by importance: edge algorithm
+  -ff : perform flow computation to rank edges by importance: node algorithm
+  -a : show all spurious edges rather than just those from reachable methods
+  -m : print names of missing methods
+  -p : ignore edges out of doPrivileged methods
+  -switch : switch supergraph and subgraph
+</pre>
+<h3>CallGraphBFS</h3>
+The CallGraphBFS tool finds paths or cycles between methods in a call graph.
+When executed with one method as a parameter, it finds a shortest cycle
+of calls leading from the method back to itself. When executed with
+two methods as parameters, it finds a shortest path from the first
+method to the second method.
+<pre>
+Usage: java probe.CallGraphBFS graph.gxl package class methodname methodsig [package2 class2 methodname2 methodsig2]
+</pre>
 
 <hr>
 <p>

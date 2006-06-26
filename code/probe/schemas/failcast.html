@@ -9,7 +9,70 @@ ProBe Cast Safety Data Format
 <h1>
 <a href="../index.html">ProBe</a> Cast Safety Data Format
 </h1>
+<h2>Specification</h2>
+<h3>Schema</h3>
 <img src="failcast.png">
+<h3>Nodes</h3>
+<h4>Root</h4>
+Each cast safety graph has a single Root node, which does not correspond
+to any element of the program. It is used as the starting point of
+fails and executes edges. The Root node has no attributes.
+
+<h4>Stmt</h4>
+Each Stmt node represents a checkcast bytecode
+instruction in the program. The offset attribute is the bytecode offset
+of the instruction in the method in which it appears.
+
+<h4>Method</h4>
+Each Method node represents a method in the program. The name attribute
+specifies the name of the method. The signature attribute specifies the
+parameters and return type (but not the name) of the method in the same
+format as they are stored in the a Method Descriptor in the Java class
+file format (see <a href="http://java.sun.com/docs/books/vmspec/">The
+Java Virtual Machine Specification</a>, section 4.3.3).
+
+<h4>Class</h4>
+Each Class node represents a class in the program. The name attribute
+specifies the name of the class, not including the package. For inner
+classes, the name is determined as in the Java class file is used (i.e.
+the name may contain $ signs). The package attribute specifies the
+package in which the class is defined, with subpackages separated
+by a period.
+
+<h3>Edges</h3>
+<h4>fails</h4>
+If a checkcast bytecode instruction fails (i.e. causes a
+ClassCastException to be thrown) during the execution of the program, a
+fails edge appears from the Root node to the Stmt node representing the
+checkcast instruction.
+
+<h4>executes</h4>
+If a checkcast bytecode instruction executes (regardless of whether
+the check succeeds or not) during the execution of the program, an
+executes edge appears from the Root node to the Stmt node representing
+the checkcast instruction.
+
+<h4>declaredIn</h4>
+Each Method node has exactly one declaredIn edge to the Class node
+corresponding to the class in which the method is declared.
+
+<h4>inBody</h4>
+Each Stmt node has exactly one inBody edge to the Method node
+corresponding to the method in whose body the corresponding bytecode
+instruction appears.
+
+<h2>Tools</h2>
+<h3>FailCastInfo</h3>
+The FailCastInfo tool counts the number of cast instructions that
+execute and that fail. Optionally, it can also print lists of these
+casts.
+<pre>
+Usage: java probe.FailCastInfo [options] failcast.gxl
+  -a : print list of all cast statements
+  -v : print list of potentially failing cast statements
+  -lib file : ignore methods in packages listed in file
+</pre>
+
 
 <hr>
 <p>
