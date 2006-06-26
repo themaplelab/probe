@@ -22,6 +22,8 @@ public class Jui {
                                         true, "ISO-8859-1");
                 String line = in.readLine();
                 if( line != null ) {
+                    out.println("HTTP/1.0 200 OK\r");
+                    out.println( "Content-Type: text/html\r\n" );
                     out.println( process(line) );
                 }
                 client.shutdownInput();
