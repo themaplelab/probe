@@ -321,10 +321,8 @@ public class GXLWriter {
     /** Write side-effect information to a GXL file. */
     public void write( SideEffect sideEffect, OutputStream file ) throws IOException {
         uri = new URIs( "/~olhotak/probe/schemas/sideeffect.gxl" );
-        System.out.println("initializeMaps");
         initializeMaps();
 
-        System.out.println("collecting sets");
         // Collect up all the stmts, methods and classes.
         Set sets = new HashSet();
         sets.addAll(sideEffect.reads().values());
@@ -338,7 +336,6 @@ public class GXLWriter {
             }
         }
 
-        System.out.println("collecting stmts");
         Set stmts = new HashSet();
         stmts.addAll(sideEffect.reads().keySet());
         stmts.addAll(sideEffect.writes().keySet());
@@ -347,28 +344,20 @@ public class GXLWriter {
             addStmt(stmt);
         }
         
-        System.out.println("assigning ids");
         // Assign ids to all method and class nodes.
         assignIDs();
 
-        System.out.println("adding base nodes");
         // Create the GXL nodes in the graph.
         GXLDocument gxlDocument = new GXLDocument();
         GXLGraph graph = new GXLGraph( "sideeffect" );
         graph.setType(uri.uSideEffect());
 
-        System.out.println("adding classes");
         addClasses(graph);
-        System.out.println("adding methods");
         addMethods(graph);
-        System.out.println("adding stmts");
         addStmts(graph);
-        System.out.println("adding fields");
         addFields(graph);
-        System.out.println("adding fieldsets");
         addFieldSets(graph);
 
-        System.out.println("adding reads");
         // Add the reads edges to the GXL graph.
         for( Iterator stIt = sideEffect.reads().keySet().iterator(); stIt.hasNext(); ) {
             final ProbeStmt st = (ProbeStmt) stIt.next();
@@ -377,7 +366,6 @@ public class GXLWriter {
             edge.setType(uri.reads());
             graph.add( edge );
         }
-        System.out.println("adding writes");
         for( Iterator stIt = sideEffect.writes().keySet().iterator(); stIt.hasNext(); ) {
             final ProbeStmt st = (ProbeStmt) stIt.next();
             ProbeFieldSet set = (ProbeFieldSet) sideEffect.writes().get(st);
@@ -385,11 +373,8 @@ public class GXLWriter {
             edge.setType(uri.writes());
             graph.add( edge );
         }
-        System.out.println("adding set-fields");
-        System.out.println("there are "+sets.size()+" sets");
         for( Iterator setIt = sets.iterator(); setIt.hasNext(); ) {
             final ProbeFieldSet set = (ProbeFieldSet) setIt.next();
-            System.out.println("this set has "+set.fields().size()+" fields");
             for( Iterator fieldIt = set.fields().iterator(); fieldIt.hasNext(); ) {
                 final ProbeField field = (ProbeField) fieldIt.next();
                 String id;
@@ -399,11 +384,9 @@ public class GXLWriter {
             }
         }
 
-        System.out.println("writing");
         // Write out the GXL graph.
         gxlDocument.getDocumentElement().add(graph);
         gxlDocument.write(file);
-        System.out.println("done writing");
     }
 
 
