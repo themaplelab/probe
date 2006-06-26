@@ -8,9 +8,12 @@ public class Util {
         if(filename == null) return null;
         Collection ret = new HashSet();
         try {
-            DataInputStream in = new DataInputStream(new FileInputStream(filename));
-            while(in.available() != 0) {
-                ret.add(in.readLine());
+            BufferedReader in = new BufferedReader(new InputStreamReader(
+                        new FileInputStream(filename)));
+            while(true) {
+                String line = in.readLine();
+                if(line == null) break;
+                ret.add(line);
             }
             in.close();
         } catch( Exception e ) {
