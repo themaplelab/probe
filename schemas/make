@@ -1,3 +1,0 @@
-#!/bin/sh
-for i in *.gxl; do java probe.GXL2Dot < $i | dot -Tps > ${i/gxl/ps}; done
-for i in *.gxl; do convert ${i/gxl/ps} ${i/gxl/png}; done

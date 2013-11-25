@@ -17,7 +17,7 @@ public class ProbeClass {
         return true;
     }
     public String toString() {
-        if( pkg == "" ) return name;
+        if( "".equals(pkg) ) return name;
         return pkg+"."+name;
     }
 

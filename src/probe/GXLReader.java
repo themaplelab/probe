@@ -19,7 +19,7 @@ public class GXLReader {
         for( Iterator nodeIt = entryPoints.iterator(); nodeIt.hasNext(); ) {
 
             final GXLNode node = (GXLNode) nodeIt.next();
-            ret.entryPoints().add( nodeToMethod.get(node) );
+            ret.entryPoints().add( (ProbeMethod) nodeToMethod.get(node) );
         }
         for( Iterator edgeIt = callEdges.iterator(); edgeIt.hasNext(); ) {
             final GXLEdge edge = (GXLEdge) edgeIt.next();
@@ -240,21 +240,21 @@ public class GXLReader {
     private void sortNodes() {
         for( Iterator nodeIt = nodes.iterator(); nodeIt.hasNext(); ) {
             final GXLNode node = (GXLNode) nodeIt.next();
-            if( node.getType().getURI().equals( uri.uRoot() ) ) {
+            if( eqURI(node.getType().getURI(), uri.uRoot() ) ) {
                 root = node;
-            } else if( node.getType().getURI().equals( uri.uClass() ) ) {
+            } else if( eqURI(node.getType().getURI(), uri.uClass() ) ) {
                 classes.add(node);
-            } else if( node.getType().getURI().equals( uri.uMethod() ) ) {
+            } else if( eqURI(node.getType().getURI(), uri.uMethod() ) ) {
                 methods.add(node);
-            } else if( node.getType().getURI().equals( uri.uField() ) ) {
+            } else if( eqURI(node.getType().getURI(), uri.uField() ) ) {
                 fields.add(node);
-            } else if( node.getType().getURI().equals( uri.uStmt() ) ) {
+            } else if( eqURI(node.getType().getURI(), uri.uStmt() ) ) {
                 stmts.add(node);
-            } else if( node.getType().getURI().equals( uri.uParameter() ) ) {
+            } else if( eqURI(node.getType().getURI(), uri.uParameter() ) ) {
                 parameters.add(node);
-            } else if( node.getType().getURI().equals( uri.uPtSet() ) ) {
+            } else if( eqURI(node.getType().getURI(), uri.uPtSet() ) ) {
                 ptsets.add(node);
-            } else if( node.getType().getURI().equals( uri.uFieldSet() ) ) {
+            } else if( eqURI(node.getType().getURI(), uri.uFieldSet() ) ) {
                 fieldsets.add(node);
             } else {
                 throw new RuntimeException( "unrecognized node "+node+"; its id is "+node.getID() );
@@ -275,36 +275,39 @@ public class GXLReader {
     private Map reads = new HashMap();
     private Map writes = new HashMap();
     private List inSet = new ArrayList();
+    private boolean eqURI(java.net.URI u1, java.net.URI u2) {
+        return u1.getFragment().equals(u2.getFragment());
+    }
     private void sortEdges() {
         for( Iterator edgeIt = edges.iterator(); edgeIt.hasNext(); ) {
             final GXLEdge edge = (GXLEdge) edgeIt.next();
             GXLNode src = (GXLNode) edge.getSource();
             GXLNode dst = (GXLNode) edge.getTarget();
-            if( edge.getType().getURI().equals( uri.declaredIn() ) ) {
+            if( eqURI(edge.getType().getURI(), uri.declaredIn() ) ) {
                 declaredIn.put(src, dst);
-            } else if( edge.getType().getURI().equals( uri.inBody() ) ) {
+            } else if( eqURI(edge.getType().getURI(), uri.inBody() ) ) {
                 inBody.put(src, dst);
-            } else if( edge.getType().getURI().equals( uri.pointsTo() ) ) {
+            } else if( eqURI(edge.getType().getURI(), uri.pointsTo() ) ) {
                 pointsTo.put(src, dst);
-            } else if( edge.getType().getURI().equals( uri.reads() ) ) {
+            } else if( eqURI(edge.getType().getURI(), uri.reads() ) ) {
                 reads.put(src, dst);
-            } else if( edge.getType().getURI().equals( uri.writes() ) ) {
+            } else if( eqURI(edge.getType().getURI(), uri.writes() ) ) {
                 writes.put(src, dst);
-            } else if( edge.getType().getURI().equals( uri.entryPoint() ) ) {
+            } else if( eqURI(edge.getType().getURI(), uri.entryPoint() ) ) {
                 entryPoints.add(dst);
-            } else if( edge.getType().getURI().equals( uri.escapesThread() ) ) {
+            } else if( eqURI(edge.getType().getURI(), uri.escapesThread() ) ) {
                 escapesThread.add(dst);
-            } else if( edge.getType().getURI().equals( uri.anyAlloc() ) ) {
+            } else if( eqURI(edge.getType().getURI(), uri.anyAlloc() ) ) {
                 anyAlloc.add(dst);
-            } else if( edge.getType().getURI().equals( uri.escapesMethod() ) ) {
+            } else if( eqURI(edge.getType().getURI(), uri.escapesMethod() ) ) {
                 escapesMethod.add(dst);
-            } else if( edge.getType().getURI().equals( uri.fails() ) ) {
+            } else if( eqURI(edge.getType().getURI(), uri.fails() ) ) {
                 fails.add(dst);
-            } else if( edge.getType().getURI().equals( uri.executes() ) ) {
+            } else if( eqURI(edge.getType().getURI(), uri.executes() ) ) {
                 executes.add(dst);
-            } else if( edge.getType().getURI().equals( uri.calls() ) ) {
+            } else if( eqURI(edge.getType().getURI(), uri.calls() ) ) {
                 callEdges.add(edge);
-            } else if( edge.getType().getURI().equals( uri.inSet() ) ) {
+            } else if( eqURI(edge.getType().getURI(), uri.inSet() ) ) {
                 inSet.add(edge);
             } else {
                 throw new RuntimeException( "unrecognized edge "+edge+"; its id is "+edge.getID() );

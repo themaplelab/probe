@@ -5,6 +5,8 @@ public class CallEdge implements Comparable {
     /** @param src The method that is the source of the call.
      * @param dst The method that is the target of the call. */
     public CallEdge( ProbeMethod src, ProbeMethod dst ) {
+        if(src == null) throw new NullPointerException();
+        if(dst == null) throw new NullPointerException();
         this.src = src;
         this.dst = dst;
     }

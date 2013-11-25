@@ -52,6 +52,10 @@ public class ObjectManager {
         }
         return ret;
     }
+    
+    public ProbeMethod getMethod(String pkg, String cls, String name, String signature) {
+    	return getMethod(getClass(pkg, cls), name, signature);
+    }
 
     /** Returns the object representing a field, creating it if necessary.
      * @param cls - The object representing the declaring class of the field.
