@@ -38,7 +38,15 @@ public class CallGraphInfo {
             try {
                 a = new GXLReader().readCallGraph(new FileInputStream(filename));
             } catch( RuntimeException e ) {
-                a = new GXLReader().readCallGraph(new GZIPInputStream(new FileInputStream(filename)));
+                try {
+                    a = new GXLReader().readCallGraph(new GZIPInputStream(new FileInputStream(filename)));
+                } catch( RuntimeException e2 ) {
+                    try {
+                        a = new TextReader().readCallGraph(new FileInputStream(filename));
+                    } catch( RuntimeException e3 ) {
+                        a = new TextReader().readCallGraph(new GZIPInputStream(new FileInputStream(filename)));
+                    }
+                }
             }
         } catch( IOException e ) {
             throw new RuntimeException( "caught IOException "+e );
