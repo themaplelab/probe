@@ -4,6 +4,11 @@ import java.io.*;
 
 /** Utility methods. */
 public class Util {
+	public static final String MethodTag = "METHOD";
+	public static final String ClassTag = "CLASS";
+	public static final String EntrypointTag = "ENTRYPOINT";
+	public static final String EdgeTag = "CALLEDGE";
+	
     public static Collection readLib(String filename) {
         if(filename == null) return null;
         Collection ret = new HashSet();
