@@ -5,7 +5,6 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -45,6 +44,7 @@ public class TextWriter {
 			out.println(getId(e.src()));
 			out.println(getId(e.dst()));
 			out.println(e.weight());
+			out.println(e.context());
 		}
 
 		file.close();
@@ -253,14 +253,14 @@ public class TextWriter {
 
 	/* End of public methods. */
 
-	private Set fields;
-	private Set parameters;
-	private Set stmts;
-	private Set methods;
-	private Set classes;
-	private Set ptsets;
-	private Set fieldsets;
-	private Map idMap;
+	private Set<ProbeField> fields;
+	private Set<ProbeParameter> parameters;
+	private Set<ProbeStmt> stmts;
+	private Set<ProbeMethod> methods;
+	private Set<ProbeClass> classes;
+	private Set<ProbePtSet> ptsets;
+	private Set<ProbeFieldSet> fieldsets;
+	private Map<Object, Integer> idMap;
 
 	private void addMethod(ProbeMethod m) {
 		methods.add(m);
@@ -277,38 +277,37 @@ public class TextWriter {
 	}
 
 	private String getId(Pointer s) {
-		Integer id = (Integer) idMap.get(s);
+		Integer id = idMap.get(s);
 		return "id" + id.toString();
 	}
 
 	private String getId(ProbeMethod m) {
-		Integer id = (Integer) idMap.get(m);
+		Integer id = idMap.get(m);
 		return "id" + id.toString();
 	}
 
 	private String getId(ProbeField f) {
-		Integer id = (Integer) idMap.get(f);
+		Integer id = idMap.get(f);
 		return "id" + id.toString();
 	}
 
 	private String getId(ProbeClass cl) {
-		Integer id = (Integer) idMap.get(cl);
+		Integer id = idMap.get(cl);
 		return "id" + id.toString();
 	}
 
 	private String getId(ProbePtSet p) {
-		Integer id = (Integer) idMap.get(p);
+		Integer id = idMap.get(p);
 		return "id" + id.toString();
 	}
 
 	private String getId(ProbeFieldSet p) {
-		Integer id = (Integer) idMap.get(p);
+		Integer id = idMap.get(p);
 		return "id" + id.toString();
 	}
 
 	private void outputClasses(PrintWriter out) {
-		for (Iterator clIt = classes.iterator(); clIt.hasNext();) {
-			final ProbeClass cl = (ProbeClass) clIt.next();
+		for (ProbeClass cl : classes) {
 			outputClass(out, cl);
 		}
 	}
@@ -321,8 +320,7 @@ public class TextWriter {
 	}
 
 	private void outputMethods(PrintWriter out) {
-		for (Iterator mIt = methods.iterator(); mIt.hasNext();) {
-			final ProbeMethod m = (ProbeMethod) mIt.next();
+		for (ProbeMethod m : methods) {
 			outputMethod(out, m);
 		}
 	}
@@ -336,45 +334,38 @@ public class TextWriter {
 	}
 
 	private void initializeMaps() {
-		stmts = new HashSet();
-		fields = new HashSet();
-		methods = new HashSet();
-		classes = new HashSet();
-		parameters = new HashSet();
-		ptsets = new HashSet();
-		fieldsets = new HashSet();
+		stmts = new HashSet<ProbeStmt>();
+		fields = new HashSet<ProbeField>();
+		methods = new HashSet<ProbeMethod>();
+		classes = new HashSet<ProbeClass>();
+		parameters = new HashSet<ProbeParameter>();
+		ptsets = new HashSet<ProbePtSet>();
+		fieldsets = new HashSet<ProbeFieldSet>();
 	}
 
 	/** Assign ids to all method and class nodes. */
 	private void assignIDs() {
 		int id = 1;
-		idMap = new HashMap();
-		for (Iterator sIt = stmts.iterator(); sIt.hasNext();) {
-			final ProbeStmt s = (ProbeStmt) sIt.next();
+		idMap = new HashMap<Object, Integer>();
+		for (ProbeStmt s : stmts) {
 			idMap.put(s, new Integer(id++));
 		}
-		for (Iterator mIt = methods.iterator(); mIt.hasNext();) {
-			final ProbeMethod m = (ProbeMethod) mIt.next();
+		for (ProbeMethod m : methods) {
 			idMap.put(m, new Integer(id++));
 		}
-		for (Iterator fIt = fields.iterator(); fIt.hasNext();) {
-			final ProbeField f = (ProbeField) fIt.next();
+		for (ProbeField f : fields) {
 			idMap.put(f, new Integer(id++));
 		}
-		for (Iterator clIt = classes.iterator(); clIt.hasNext();) {
-			final ProbeClass cl = (ProbeClass) clIt.next();
+		for (ProbeClass cl : classes) {
 			idMap.put(cl, new Integer(id++));
 		}
-		for (Iterator pIt = parameters.iterator(); pIt.hasNext();) {
-			final ProbeParameter p = (ProbeParameter) pIt.next();
+		for (ProbeParameter p : parameters) {
 			idMap.put(p, new Integer(id++));
 		}
-		for (Iterator pIt = ptsets.iterator(); pIt.hasNext();) {
-			final ProbePtSet p = (ProbePtSet) pIt.next();
+		for (ProbePtSet p : ptsets) {
 			idMap.put(p, new Integer(id++));
 		}
-		for (Iterator pIt = fieldsets.iterator(); pIt.hasNext();) {
-			final ProbeFieldSet p = (ProbeFieldSet) pIt.next();
+		for (ProbeFieldSet p : fieldsets) {
 			idMap.put(p, new Integer(id++));
 		}
 	}
