@@ -43,8 +43,11 @@ public class TextReader {
 				String src = in.readLine();
 				String dst = in.readLine();
 				String weight = in.readLine();
+				String context = in.readLine();
 
-				ret.edges().add(new CallEdge(nodeToMethod.get(src), nodeToMethod.get(dst), Double.parseDouble(weight)));
+				ret.edges()
+						.add(new CallEdge(nodeToMethod.get(src), nodeToMethod.get(dst), Double.parseDouble(weight),
+								context));
 			} else {
 				throw new RuntimeException("Unexpected line: " + line);
 			}

@@ -23,12 +23,43 @@ public class CallEdge implements Comparable {
 	 *            The method that is the source of the call.
 	 * @param dst
 	 *            The method that is the target of the call.
+	 * @param context
+	 *            Optional value distinguishing edges based on the call site context.
+	 */
+	public CallEdge(ProbeMethod src, ProbeMethod dst, String context) {
+		this.src = src;
+		this.dst = dst;
+		this.context = context;
+	}
+
+	/**
+	 * @param src
+	 *            The method that is the source of the call.
+	 * @param dst
+	 *            The method that is the target of the call.
 	 * @param weight
 	 *            Optional value expressing the importance of this edge for sorting purposes.
 	 */
 	public CallEdge(ProbeMethod src, ProbeMethod dst, double weight) {
 		this.src = src;
 		this.dst = dst;
+		this.weight = weight;
+	}
+
+	/**
+	 * @param src
+	 *            The method that is the source of the call.
+	 * @param dst
+	 *            The method that is the target of the call.
+	 * @param weight
+	 *            Optional value expressing the importance of this edge for sorting purposes.
+	 * @param context
+	 *            Optional value distinguishing edges based on the call site context.
+	 */
+	public CallEdge(ProbeMethod src, ProbeMethod dst, double weight, String context) {
+		this.src = src;
+		this.dst = dst;
+		this.context = context;
 		this.weight = weight;
 	}
 
@@ -49,25 +80,45 @@ public class CallEdge implements Comparable {
 		return weight;
 	}
 
-	public int hashCode() {
-		return src.hashCode() + dst.hashCode();
+	/**
+	 * An optional context that distinguishes edges based on their call site location
+	 * 
+	 * @return
+	 */
+	public String context() {
+		return context;
 	}
 
+	@Override
+	public int hashCode() {
+		return src.hashCode() + dst.hashCode() + context.hashCode();
+	}
+
+	@Override
 	public boolean equals(Object o) {
 		if (!(o instanceof CallEdge))
 			return false;
+
 		CallEdge other = (CallEdge) o;
-		if (!src.equals(other.src))
-			return false;
-		if (!dst.equals(other.dst))
-			return false;
-		return true;
+		return src.equals(other.src) && dst.equals(other.dst) && equalContexts(other);
 	}
 
+	@Override
 	public String toString() {
 		if (weight != 0)
-			return src.toString() + " ===> " + dst.toString() + " " + weight;
-		return src.toString() + " ===> " + dst.toString();
+			return context + " :: " + src.toString() + " ===> " + dst.toString() + " " + weight;
+		return context + " :: " + src.toString() + " ===> " + dst.toString();
+	}
+
+	/**
+	 * Checks for context equality. It returns true if either contexts is unknown.
+	 * 
+	 * @param that
+	 * @return
+	 */
+	public boolean equalContexts(CallEdge that) {
+		return context.equals(UKNOWN_CONTEXT) || that.context.equals(UKNOWN_CONTEXT) ? true : context
+				.equals(that.context);
 	}
 
 	public int compareTo(Object o) {
@@ -89,5 +140,7 @@ public class CallEdge implements Comparable {
 
 	private ProbeMethod src;
 	private ProbeMethod dst;
-	private double weight;
+	private double weight = 0;
+	private String context = UKNOWN_CONTEXT;
+	public static final String UKNOWN_CONTEXT = "unknown: -1";
 }
