@@ -52,7 +52,8 @@ public class TextReader {
 				throw new RuntimeException("Unexpected line: " + line);
 			}
 		}
-
+		
+		in.close();
 		return ret;
 	}
 
