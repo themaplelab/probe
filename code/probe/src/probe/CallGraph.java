@@ -17,6 +17,21 @@ public class CallGraph {
 	}
 
 	/**
+	 * The immutable set of context insensitive call edges in the call graph
+	 * 
+	 * @return
+	 */
+	public Set<CallEdge> edgesIgnoringContext() {
+		Set<CallEdge> result = new HashSet<CallEdge>();
+		
+		for (CallEdge e : edges) {
+			result.add(new CallEdge(e.src(), e.dst()));
+		}
+
+		return Collections.unmodifiableSet(result);
+	}
+
+	/**
 	 * Returns a set of those methods that are transitively reachable in the call graph from its entry points.
 	 */
 	public Set<ProbeMethod> findReachables() {
@@ -28,7 +43,8 @@ public class CallGraph {
 					newReachables.add(edge.dst());
 				}
 			}
-			if (newReachables.isEmpty()) break;
+			if (newReachables.isEmpty())
+				break;
 			reachables.addAll(newReachables);
 		}
 		return reachables;
