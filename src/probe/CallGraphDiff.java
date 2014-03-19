@@ -16,15 +16,16 @@ import java.util.zip.GZIPInputStream;
 public class CallGraphDiff {
 	public static void usage() {
 		System.out.println("Usage: java probe.CallGraphDiff [options] supergraph.gxl subgraph.gxl");
-		System.out.println("  -e : ignore edges in supergraph whose targets are entry points in subgraph");
-		System.out.println("  -r : ignore edges in supergraph whose targets are reachable in subgraph");
-		System.out.println("  -c : ignore call edge context");
-		System.out.println("  -f : perform flow computation to rank edges by importance: edge algorithm");
-		System.out.println("  -ff : perform flow computation to rank edges by importance: node algorithm");
-		System.out.println("  -a : show all spurious edges rather than just those from reachable methods");
-		System.out.println("  -m : print names of missing methods");
-		System.out.println("  -p : ignore edges out of doPrivileged methods");
-		System.out.println("  -d : output dot graphs");
+		System.out.println("  -e      : ignore edges in supergraph whose targets are entry points in subgraph");
+		System.out.println("  -r      : ignore edges in supergraph whose targets are reachable in subgraph");
+		System.out.println("  -c      : ignore call edge context");
+		System.out.println("  -s      : ignore edges to static initializer");
+		System.out.println("  -f      : perform flow computation to rank edges by importance: edge algorithm");
+		System.out.println("  -ff     : perform flow computation to rank edges by importance: node algorithm");
+		System.out.println("  -a      : show all spurious edges rather than just those from reachable methods");
+		System.out.println("  -m      : print names of missing methods");
+		System.out.println("  -p      : ignore edges out of doPrivileged methods");
+		System.out.println("  -d      : output dot graphs");
 		System.out.println("  -switch : switch supergraph and subgraph");
 		System.exit(1);
 	}
@@ -32,6 +33,7 @@ public class CallGraphDiff {
 	public static boolean dashE = false;
 	public static boolean dashR = false;
 	public static boolean dashC = false;
+	public static boolean dashS = false;
 	public static boolean dashF = false;
 	public static boolean dashFF = false;
 	public static boolean dashA = false;
@@ -54,6 +56,8 @@ public class CallGraphDiff {
 				dashR = true;
 			else if (!doneOptions && args[i].equals("-c"))
 				dashC = true;
+			else if (!doneOptions && args[i].equals("-s"))
+				dashS = true;
 			else if (!doneOptions && args[i].equals("-f"))
 				dashF = true;
 			else if (!doneOptions && args[i].equals("-ff"))
@@ -89,15 +93,17 @@ public class CallGraphDiff {
 		supergraph = readCallGraph(superFile);
 		subgraph = readCallGraph(subFile);
 
-		if (dashP) {
+		if (dashP || dashS) {
 			for (Iterator<CallEdge> edgeIt = supergraph.edges().iterator(); edgeIt.hasNext();) {
 				final CallEdge edge = edgeIt.next();
-				if (edge.src().name().equals("doPrivileged"))
+				if ((dashP && edge.src().name().equals("doPrivileged")) ||
+						(dashS && edge.dst().name().equals("<clinit>")))
 					edgeIt.remove();
 			}
 			for (Iterator<CallEdge> edgeIt = subgraph.edges().iterator(); edgeIt.hasNext();) {
 				final CallEdge edge = edgeIt.next();
-				if (edge.src().name().equals("doPrivileged"))
+				if ((dashP && edge.src().name().equals("doPrivileged")) ||
+						(dashS && edge.dst().name().equals("<clinit>")))
 					edgeIt.remove();
 			}
 		}
