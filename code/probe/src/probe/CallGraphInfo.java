@@ -45,19 +45,18 @@ public class CallGraphInfo {
 		Collection<String> libs = Util.readLib(dashLib);
 
 		CallGraph a;
+
 		try {
-			try {
+			if (filename.endsWith("txt.gzip")) {
+				a = new TextReader().readCallGraph(new GZIPInputStream(new FileInputStream(filename)));
+			} else if (filename.endsWith("txt")) {
 				a = new TextReader().readCallGraph(new FileInputStream(filename));
-			} catch (RuntimeException e) {
-				try {
-					a = new TextReader().readCallGraph(new GZIPInputStream(new FileInputStream(filename)));
-				} catch (RuntimeException e2) {
-					try {
-						a = new GXLReader().readCallGraph(new FileInputStream(filename));
-					} catch (RuntimeException e3) {
-						a = new GXLReader().readCallGraph(new GZIPInputStream(new FileInputStream(filename)));
-					}
-				}
+			} else if (filename.endsWith("gxl.gzip")) {
+				a = new GXLReader().readCallGraph(new GZIPInputStream(new FileInputStream(filename)));
+			} else if (filename.endsWith("gxl")) {
+				a = new GXLReader().readCallGraph(new FileInputStream(filename));
+			} else {
+				throw new IOException("undefined file extension.");
 			}
 		} catch (IOException e) {
 			throw new RuntimeException("caught IOException " + e);
