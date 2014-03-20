@@ -20,6 +20,8 @@ public class CallGraphDiff {
 		System.out.println("  -r      : ignore edges in supergraph whose targets are reachable in subgraph");
 		System.out.println("  -c      : ignore call edge context");
 		System.out.println("  -s      : ignore edges to static initializer");
+		System.out.println("  -j      : ignore edges to methods in the Java standard library");
+		System.out.println("  -i      : do not output entrypoint information");
 		System.out.println("  -f      : perform flow computation to rank edges by importance: edge algorithm");
 		System.out.println("  -ff     : perform flow computation to rank edges by importance: node algorithm");
 		System.out.println("  -a      : show all spurious edges rather than just those from reachable methods");
@@ -34,6 +36,8 @@ public class CallGraphDiff {
 	public static boolean dashR = false;
 	public static boolean dashC = false;
 	public static boolean dashS = false;
+	public static boolean dashJ = false;
+	public static boolean dashI = false;
 	public static boolean dashF = false;
 	public static boolean dashFF = false;
 	public static boolean dashA = false;
@@ -58,6 +62,10 @@ public class CallGraphDiff {
 				dashC = true;
 			else if (!doneOptions && args[i].equals("-s"))
 				dashS = true;
+			else if (!doneOptions && args[i].equals("-j"))
+				dashJ = true;
+			else if (!doneOptions && args[i].equals("-i"))
+				dashI = true;
 			else if (!doneOptions && args[i].equals("-f"))
 				dashF = true;
 			else if (!doneOptions && args[i].equals("-ff"))
@@ -93,17 +101,19 @@ public class CallGraphDiff {
 		supergraph = readCallGraph(superFile);
 		subgraph = readCallGraph(subFile);
 
-		if (dashP || dashS) {
+		if (dashP || dashS || dashJ) {
 			for (Iterator<CallEdge> edgeIt = supergraph.edges().iterator(); edgeIt.hasNext();) {
 				final CallEdge edge = edgeIt.next();
-				if ((dashP && edge.src().name().equals("doPrivileged")) ||
-						(dashS && edge.dst().name().equals("<clinit>")))
+				if ((dashP && edge.src().name().equals("doPrivileged"))
+						|| (dashS && edge.dst().name().equals("<clinit>"))
+						|| (dashJ && edge.dst().cls().pkg().startsWith("java.")))
 					edgeIt.remove();
 			}
 			for (Iterator<CallEdge> edgeIt = subgraph.edges().iterator(); edgeIt.hasNext();) {
 				final CallEdge edge = edgeIt.next();
-				if ((dashP && edge.src().name().equals("doPrivileged")) ||
-						(dashS && edge.dst().name().equals("<clinit>")))
+				if ((dashP && edge.src().name().equals("doPrivileged"))
+						|| (dashS && edge.dst().name().equals("<clinit>"))
+						|| (dashJ && edge.dst().cls().pkg().startsWith("java.")))
 					edgeIt.remove();
 			}
 		}
@@ -114,27 +124,30 @@ public class CallGraphDiff {
 			weights = new EdgeWeights2(supergraph, subgraph, dashD);
 		}
 		CallGraph diff = diff(supergraph, subgraph);
-		System.out.println("===========================================================================");
-		System.out.println("Missing entry points in " + subFile + ": " + diff.entryPoints().size());
-		System.out.println("===========================================================================");
-		if (weights != null) {
-			final AbsEdgeWeights weightsF = weights;
-			TreeSet<ProbeMethod> ts = new TreeSet<ProbeMethod>(new Comparator<ProbeMethod>() {
-				public int compare(ProbeMethod pm1, ProbeMethod pm2) {
-					if (weightsF.weight(pm1) < weightsF.weight(pm2))
-						return -1;
-					if (weightsF.weight(pm1) > weightsF.weight(pm2))
-						return 1;
-					return 0;
+
+		if (!dashI) {
+			System.out.println("===========================================================================");
+			System.out.println("Missing entry points in " + subFile + ": " + diff.entryPoints().size());
+			System.out.println("===========================================================================");
+			if (weights != null) {
+				final AbsEdgeWeights weightsF = weights;
+				TreeSet<ProbeMethod> ts = new TreeSet<ProbeMethod>(new Comparator<ProbeMethod>() {
+					public int compare(ProbeMethod pm1, ProbeMethod pm2) {
+						if (weightsF.weight(pm1) < weightsF.weight(pm2))
+							return -1;
+						if (weightsF.weight(pm1) > weightsF.weight(pm2))
+							return 1;
+						return 0;
+					}
+				});
+				ts.addAll(diff.entryPoints());
+				for (ProbeMethod m : ts) {
+					System.out.println(weights.weight(m) + " " + m);
 				}
-			});
-			ts.addAll(diff.entryPoints());
-			for (ProbeMethod m : ts) {
-				System.out.println(weights.weight(m) + " " + m);
-			}
-		} else {
-			for (ProbeMethod m : diff.entryPoints()) {
-				System.out.println(m.toString());
+			} else {
+				for (ProbeMethod m : diff.entryPoints()) {
+					System.out.println(m.toString());
+				}
 			}
 		}
 
@@ -165,6 +178,14 @@ public class CallGraphDiff {
 		Set<ProbeMethod> missingReachables = new HashSet<ProbeMethod>();
 		missingReachables.addAll(supergraph.findReachables());
 		missingReachables.removeAll(subgraph.findReachables());
+		if (dashJ) {
+			for (Iterator<ProbeMethod> methodIt = missingReachables.iterator(); methodIt.hasNext();) {
+				final ProbeMethod method = methodIt.next();
+				if (method.cls().pkg().startsWith("java."))
+					methodIt.remove();
+			}
+		}
+
 		System.out.println("===========================================================================");
 		System.out.println("Number of reachable methods missing in " + subFile + ": " + missingReachables.size());
 		System.out.println("===========================================================================");
