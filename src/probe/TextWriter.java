@@ -48,6 +48,7 @@ public class TextWriter {
 		}
 
 		file.close();
+		out.close();
 	}
 
 	/** Write a set of recursive methods to a GXL file. */
