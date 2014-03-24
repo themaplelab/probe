@@ -10,6 +10,7 @@ public class CallGraphInfo {
 		System.out.println("Usage: java probe.CallGraphInfo [options] graph.gxl");
 		System.out.println("  -m : print list of reachable methods");
 		System.out.println("  -e : print list of entry points");
+		System.out.println("  -j : ignore the Java standard library");
 		System.out.println("  -g : print list of call edges");
 		System.out.println("  -lib file : ignore methods in packages listed in file");
 		System.exit(1);
@@ -19,6 +20,7 @@ public class CallGraphInfo {
 	public static boolean dashM = false;
 	public static boolean dashE = false;
 	public static boolean dashG = false;
+	public static boolean dashJ = false;
 
 	public static final void main(String[] args) {
 		boolean doneOptions = false;
@@ -32,6 +34,8 @@ public class CallGraphInfo {
 				dashE = true;
 			else if (!doneOptions && args[i].equals("-g"))
 				dashG = true;
+			else if (!doneOptions && args[i].equals("-j"))
+				dashJ = true;
 			else if (!doneOptions && args[i].equals("--"))
 				doneOptions = true;
 			else if (filename == null)
@@ -67,6 +71,25 @@ public class CallGraphInfo {
 		for (CallEdge e : a.edges()) {
 			methods.add(e.src());
 			methods.add(e.dst());
+		}
+
+		if (dashJ) {
+			for (Iterator<CallEdge> edgeIt = a.edges().iterator(); edgeIt.hasNext();) {
+				final CallEdge edge = edgeIt.next();
+				if (edge.dst().cls().pkg().startsWith("java.")) {
+					edgeIt.remove();
+					methods.remove(edge.src());
+					methods.remove(edge.dst());
+				}
+			}
+			
+			for (Iterator<ProbeMethod> methodIt = a.entryPoints().iterator(); methodIt.hasNext();) {
+				final ProbeMethod m = methodIt.next();
+				if (m.cls().pkg().startsWith("java.")) {
+					methodIt.remove();
+					methods.remove(m);
+				}
+			}
 		}
 
 		Collection ep = Util.filterLibs(libs, a.entryPoints());
