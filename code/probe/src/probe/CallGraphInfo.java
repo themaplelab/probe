@@ -66,12 +66,7 @@ public class CallGraphInfo {
 			throw new RuntimeException("caught IOException " + e);
 		}
 
-		Set<ProbeMethod> methods = new HashSet<ProbeMethod>();
-		methods.addAll(a.entryPoints());
-		for (CallEdge e : a.edges()) {
-			methods.add(e.src());
-			methods.add(e.dst());
-		}
+		Set<ProbeMethod> methods = a.nodes();
 
 		if (dashJ) {
 			for (Iterator<CallEdge> edgeIt = a.edges().iterator(); edgeIt.hasNext();) {
