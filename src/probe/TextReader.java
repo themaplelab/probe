@@ -1,11 +1,13 @@
 package probe;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.zip.GZIPInputStream;
 
 /** Reads a call graph from a text file. */
 public class TextReader {
@@ -52,9 +54,23 @@ public class TextReader {
 				throw new RuntimeException("Unexpected line: " + line);
 			}
 		}
-		
+
 		in.close();
 		return ret;
+	}
+
+	/** Read a call graph from a text file. */
+	public CallGraph readCallGraph(String file) throws IOException {
+		if (file.endsWith("txt.gzip")) {
+			return readCallGraph(new GZIPInputStream(new FileInputStream(file)));
+		} else if (file.endsWith("txt")) {
+			return readCallGraph(new FileInputStream(file));
+		} else if (file.endsWith("gxl.gzip") || file.endsWith("gxl")) {
+			throw new IOException(
+					"No longer using GXL as file format. It generates large files. We recommend using txt.gzip instead.");
+		} else {
+			throw new IOException("undefined file extension.");
+		}
 	}
 
 	/* End of public methods. */
