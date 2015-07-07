@@ -232,21 +232,19 @@ public class CallGraphDiff {
 	private static CallGraph readCallGraph(String filename) {
 		CallGraph ret;
 		try {
-			try {
+			if (filename.endsWith("txt.gzip")) {
+				ret = new TextReader().readCallGraph(new GZIPInputStream(new FileInputStream(filename)));
+			} else if (filename.endsWith("txt")) {
 				ret = new TextReader().readCallGraph(new FileInputStream(filename));
-			} catch (RuntimeException e) {
-				try {
-					ret = new TextReader().readCallGraph(new GZIPInputStream(new FileInputStream(filename)));
-				} catch (RuntimeException e2) {
-					try {
-						ret = new GXLReader().readCallGraph(new FileInputStream(filename));
-					} catch (RuntimeException e3) {
-						ret = new GXLReader().readCallGraph(new GZIPInputStream(new FileInputStream(filename)));
-					}
-				}
+			} else if (filename.endsWith("gxl.gzip")) {
+				ret = new GXLReader().readCallGraph(new GZIPInputStream(new FileInputStream(filename)));
+			} else if (filename.endsWith("gxl")) {
+				ret = new GXLReader().readCallGraph(new FileInputStream(filename));
+			} else {
+				throw new IOException("undefined file extension.");
 			}
 		} catch (IOException e) {
-			throw new RuntimeException("caught IOException " + e + " on file " + filename);
+			throw new RuntimeException("caught IOException " + e);
 		}
 		return ret;
 	}
