@@ -15,20 +15,20 @@ import java.util.zip.GZIPInputStream;
 /** Calculates and reports the differences between two call graphs. */
 public class CallGraphDiff {
 	public static void usage() {
-		System.out.println("Usage: java probe.CallGraphDiff [options] supergraph.gxl subgraph.gxl");
-		System.out.println("  -e      : ignore edges in supergraph whose targets are entry points in subgraph");
-		System.out.println("  -r      : ignore edges in supergraph whose targets are reachable in subgraph");
-		System.out.println("  -c      : ignore call edge context");
-		System.out.println("  -s      : ignore edges to static initializer");
-		System.out.println("  -j      : ignore edges to methods in the Java standard library");
-		System.out.println("  -i      : do not output entrypoint information");
-		System.out.println("  -f      : perform flow computation to rank edges by importance: edge algorithm");
-		System.out.println("  -ff     : perform flow computation to rank edges by importance: node algorithm");
-		System.out.println("  -a      : show all spurious edges rather than just those from reachable methods");
-		System.out.println("  -m      : print names of missing methods");
-		System.out.println("  -p      : ignore edges out of doPrivileged methods");
-		System.out.println("  -d      : output dot graphs");
-		System.out.println("  -switch : switch supergraph and subgraph");
+		Util.out.println("Usage: java probe.CallGraphDiff [options] supergraph.gxl subgraph.gxl");
+		Util.out.println("  -e      : ignore edges in supergraph whose targets are entry points in subgraph");
+		Util.out.println("  -r      : ignore edges in supergraph whose targets are reachable in subgraph");
+		Util.out.println("  -c      : ignore call edge context");
+		Util.out.println("  -s      : ignore edges to static initializer");
+		Util.out.println("  -j      : ignore edges to methods in the Java standard library");
+		Util.out.println("  -i      : do not output entrypoint information");
+		Util.out.println("  -f      : perform flow computation to rank edges by importance: edge algorithm");
+		Util.out.println("  -ff     : perform flow computation to rank edges by importance: node algorithm");
+		Util.out.println("  -a      : show all spurious edges rather than just those from reachable methods");
+		Util.out.println("  -m      : print names of missing methods");
+		Util.out.println("  -p      : ignore edges out of doPrivileged methods");
+		Util.out.println("  -d      : output dot graphs");
+		Util.out.println("  -switch : switch supergraph and subgraph");
 		System.exit(1);
 	}
 
@@ -126,9 +126,9 @@ public class CallGraphDiff {
 		CallGraph diff = diff(supergraph, subgraph);
 
 		if (!dashI) {
-			System.out.println("===========================================================================");
-			System.out.println("Missing entry points in " + subFile + ": " + diff.entryPoints().size());
-			System.out.println("===========================================================================");
+			Util.out.println("===========================================================================");
+			Util.out.println("Missing entry points in " + subFile + ": " + diff.entryPoints().size());
+			Util.out.println("===========================================================================");
 			if (weights != null) {
 				final AbsEdgeWeights weightsF = weights;
 				TreeSet<ProbeMethod> ts = new TreeSet<ProbeMethod>(new Comparator<ProbeMethod>() {
@@ -142,18 +142,18 @@ public class CallGraphDiff {
 				});
 				ts.addAll(diff.entryPoints());
 				for (ProbeMethod m : ts) {
-					System.out.println(weights.weight(m) + " " + m);
+					Util.out.println(weights.weight(m) + " " + m);
 				}
 			} else {
 				for (ProbeMethod m : diff.entryPoints()) {
-					System.out.println(m.toString());
+					Util.out.println(m.toString());
 				}
 			}
 		}
 
-		System.out.println("===========================================================================");
-		System.out.println("Missing call edges in " + subFile + ": " + diff.edges().size());
-		System.out.println("===========================================================================");
+		Util.out.println("===========================================================================");
+		Util.out.println("Missing call edges in " + subFile + ": " + diff.edges().size());
+		Util.out.println("===========================================================================");
 		if (weights != null) {
 			final AbsEdgeWeights weightsF = weights;
 			TreeSet<CallEdge> ts = new TreeSet<CallEdge>(new Comparator<CallEdge>() {
@@ -167,11 +167,11 @@ public class CallGraphDiff {
 			});
 			ts.addAll(diff.edges());
 			for (CallEdge e : ts) {
-				System.out.println(weights.weight(e) + " " + e);
+				Util.out.println(weights.weight(e) + " " + e);
 			}
 		} else {
 			for (CallEdge e : diff.edges()) {
-				System.out.println(e.toString());
+				Util.out.println(e.toString());
 			}
 		}
 
@@ -186,9 +186,9 @@ public class CallGraphDiff {
 			}
 		}
 
-		System.out.println("===========================================================================");
-		System.out.println("Number of reachable methods missing in " + subFile + ": " + missingReachables.size());
-		System.out.println("===========================================================================");
+		Util.out.println("===========================================================================");
+		Util.out.println("Number of reachable methods missing in " + subFile + ": " + missingReachables.size());
+		Util.out.println("===========================================================================");
 		if (dashM) {
 			List<String> lines = new ArrayList<String>();
 			for (ProbeMethod pm : missingReachables) {
@@ -196,7 +196,7 @@ public class CallGraphDiff {
 			}
 			Collections.sort(lines);
 			for (String line : lines) {
-				System.out.println(line);
+				Util.out.println(line);
 			}
 		}
 

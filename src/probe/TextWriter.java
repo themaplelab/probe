@@ -3,6 +3,7 @@ package probe;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -14,7 +15,8 @@ import java.util.zip.GZIPOutputStream;
 public class TextWriter {
 	/** Write a call graph to a Text file. */
 	public void write(CallGraph cg, OutputStream file) throws IOException {
-		PrintWriter out = new PrintWriter(file, true);
+		// UTF-8 important to handle methods with unicode characters
+		PrintWriter out = new PrintWriter(new OutputStreamWriter(file, "UTF-8"), true);
 
 		initializeMaps();
 

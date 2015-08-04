@@ -14,7 +14,7 @@ public class TextReader {
 	/** Read a call graph from a text file. */
 	public CallGraph readCallGraph(InputStream file) throws IOException {
 
-		BufferedReader in = new BufferedReader(new InputStreamReader(file));
+		BufferedReader in = new BufferedReader(new InputStreamReader(file, "UTF-8"));
 		CallGraph ret = new CallGraph();
 
 		while (true) {

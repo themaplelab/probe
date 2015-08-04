@@ -7,12 +7,12 @@ import java.util.zip.*;
 /** Calculates and reports the differences between two call graphs. */
 public class CallGraphInfo {
 	public static void usage() {
-		System.out.println("Usage: java probe.CallGraphInfo [options] graph.gxl");
-		System.out.println("  -m : print list of reachable methods");
-		System.out.println("  -e : print list of entry points");
-		System.out.println("  -j : ignore the Java standard library");
-		System.out.println("  -g : print list of call edges");
-		System.out.println("  -lib file : ignore methods in packages listed in file");
+		Util.out.println("Usage: java probe.CallGraphInfo [options] graph.gxl");
+		Util.out.println("  -m : print list of reachable methods");
+		Util.out.println("  -e : print list of entry points");
+		Util.out.println("  -j : ignore the Java standard library");
+		Util.out.println("  -g : print list of call edges");
+		Util.out.println("  -lib file : ignore methods in packages listed in file");
 		System.exit(1);
 	}
 
@@ -22,7 +22,7 @@ public class CallGraphInfo {
 	public static boolean dashG = false;
 	public static boolean dashJ = false;
 
-	public static final void main(String[] args) {
+	public static final void main(String[] args) throws UnsupportedEncodingException {
 		boolean doneOptions = false;
 		String filename = null;
 		for (int i = 0; i < args.length; i++) {
@@ -88,33 +88,33 @@ public class CallGraphInfo {
 		}
 
 		Collection ep = Util.filterLibs(libs, a.entryPoints());
-		System.out.println("Entry points     : " + Util.filterLibs(libs, ep).size());
-		System.out.println("Edges            : " + Util.filterLibs(libs, a.edges()).size());
-		System.out.println("Methods          : " + Util.filterLibs(libs, methods).size());
+		Util.out.println("Entry points     : " + Util.filterLibs(libs, ep).size());
+		Util.out.println("Edges            : " + Util.filterLibs(libs, a.edges()).size());
+		Util.out.println("Methods          : " + Util.filterLibs(libs, methods).size());
 		Collection rm = Util.filterLibs(libs, a.findReachables());
-		System.out.println("Reachable methods: " + rm.size());
+		Util.out.println("Reachable methods: " + rm.size());
 
 		if (dashE) {
-			System.out.println("Entry points: ");
+			Util.out.println("Entry points: ");
 			for (Iterator pmIt = ep.iterator(); pmIt.hasNext();) {
 				final ProbeMethod pm = (ProbeMethod) pmIt.next();
-				System.out.println(pm);
+				Util.out.println(pm);
 			}
 		}
 
 		if (dashM) {
-			System.out.println("Reachable methods: ");
+			Util.out.println("Reachable methods: ");
 			for (Iterator pmIt = rm.iterator(); pmIt.hasNext();) {
 				final ProbeMethod pm = (ProbeMethod) pmIt.next();
-				System.out.println(pm);
+				Util.out.println(pm);
 			}
 		}
 
 		if (dashG) {
-			System.out.println("Call Edges: ");
+			Util.out.println("Call Edges: ");
 			for (Iterator pmIt = a.edges().iterator(); pmIt.hasNext();) {
 				final CallEdge pm = (CallEdge) pmIt.next();
-				System.out.println(pm);
+				Util.out.println(pm);
 			}
 		}
 	}

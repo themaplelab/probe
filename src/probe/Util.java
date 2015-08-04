@@ -3,6 +3,8 @@ package probe;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
+import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -12,6 +14,16 @@ public class Util {
 	public static final String ClassTag = "CLASS";
 	public static final String EntrypointTag = "ENTRYPOINT";
 	public static final String EdgeTag = "CALLEDGE";
+
+	public static final PrintStream out = init();
+
+	private static PrintStream init() {
+		try {
+			return new PrintStream(System.out, true, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			throw new Error(e);
+		}
+	}
 
 	public static Collection<String> readLib(String filename) {
 		if (filename == null)
