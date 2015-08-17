@@ -1,11 +1,16 @@
 package probe;
 
-import java.util.*;
-import java.util.zip.*;
-import java.io.*;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.zip.GZIPInputStream;
 
-import net.sourceforge.gxl.*;
-import probe.*;
+import net.sourceforge.gxl.GXLDocument;
 
 public class CallGraphView extends Jui {
 	public static void usage() {
@@ -227,18 +232,16 @@ public class CallGraphView extends Jui {
 	private static CallGraph readCallGraph(String filename) {
 		CallGraph a;
 		try {
-			try {
+			if (filename.endsWith("txt.gzip")) {
+				a = new TextReader().readCallGraph(new GZIPInputStream(new FileInputStream(filename)));
+			} else if (filename.endsWith("txt")) {
 				a = new TextReader().readCallGraph(new FileInputStream(filename));
-			} catch (RuntimeException e) {
-				try {
-					a = new TextReader().readCallGraph(new GZIPInputStream(new FileInputStream(filename)));
-				} catch (RuntimeException e2) {
-					try {
-						a = new GXLReader().readCallGraph(new FileInputStream(filename));
-					} catch (RuntimeException e3) {
-						a = new GXLReader().readCallGraph(new GZIPInputStream(new FileInputStream(filename)));
-					}
-				}
+			} else if (filename.endsWith("gxl.gzip")) {
+				a = new GXLReader().readCallGraph(new GZIPInputStream(new FileInputStream(filename)));
+			} else if (filename.endsWith("gxl")) {
+				a = new GXLReader().readCallGraph(new FileInputStream(filename));
+			} else {
+				throw new IOException("undefined file extension.");
 			}
 		} catch (IOException e) {
 			throw new RuntimeException("caught IOException " + e);
