@@ -1,7 +1,26 @@
 package probe;
-import java.util.*;
-import java.io.*;
-import net.sourceforge.gxl.*;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.zip.GZIPInputStream;
+
+import net.sourceforge.gxl.GXLAtomicValue;
+import net.sourceforge.gxl.GXLAttr;
+import net.sourceforge.gxl.GXLAttributedElement;
+import net.sourceforge.gxl.GXLDocument;
+import net.sourceforge.gxl.GXLEdge;
+import net.sourceforge.gxl.GXLElement;
+import net.sourceforge.gxl.GXLFloat;
+import net.sourceforge.gxl.GXLGraph;
+import net.sourceforge.gxl.GXLInt;
+import net.sourceforge.gxl.GXLNode;
 
 /** Reads a call graph from a GXL file. */
 public class GXLReader {
@@ -197,6 +216,20 @@ public class GXLReader {
 
         return ret;
     }
+    
+    /** Read a call graph from a text file. */
+	public CallGraph readCallGraph(String file) throws IOException {
+		if (file.endsWith("gxl.gzip")) {
+			return readCallGraph(new GZIPInputStream(new FileInputStream(file)));
+		} else if (file.endsWith("gxl")) {
+			return readCallGraph(new FileInputStream(file));
+		} else if (file.endsWith("txt.gzip") || file.endsWith("txt")) {
+			throw new IOException(
+					"Cannot process txt.gzip files. Please use probe.TextReader for this file.");
+		} else {
+			throw new IOException("undefined file extension.");
+		}
+	}
 
     /* End of public methods. */
 
