@@ -13,6 +13,7 @@ public class CallGraphInfo {
 		Util.out.println("  -j : ignore the Java standard library");
 		Util.out.println("  -g : print list of call edges");
 		Util.out.println("  -lib file : ignore methods in packages listed in file");
+		Util.out.println("  -u : print list of unreachable methods");
 		System.exit(1);
 	}
 
@@ -21,6 +22,7 @@ public class CallGraphInfo {
 	public static boolean dashE = false;
 	public static boolean dashG = false;
 	public static boolean dashJ = false;
+	public static boolean dashU = false;
 
 	public static final void main(String[] args) throws UnsupportedEncodingException {
 		boolean doneOptions = false;
@@ -30,6 +32,8 @@ public class CallGraphInfo {
 				dashLib = args[++i];
 			else if (!doneOptions && args[i].equals("-m"))
 				dashM = true;
+			else if (!doneOptions && args[i].equals("-u"))
+				dashU = true;
 			else if (!doneOptions && args[i].equals("-e"))
 				dashE = true;
 			else if (!doneOptions && args[i].equals("-g"))
@@ -109,11 +113,22 @@ public class CallGraphInfo {
 				Util.out.println(pm);
 			}
 		}
-
+		
 		if (dashG) {
 			Util.out.println("Call Edges: ");
 			for (Iterator pmIt = a.edges().iterator(); pmIt.hasNext();) {
 				final CallEdge pm = (CallEdge) pmIt.next();
+				Util.out.println(pm);
+			}
+		}
+		
+		if(dashU) {
+			Util.out.println("Unreachable methods: ");
+			Collection um = methods;
+			um.removeAll(rm);
+			um = Util.filterLibs(libs, um);
+			for (Iterator pmIt = um.iterator(); pmIt.hasNext();) {
+				final ProbeMethod pm = (ProbeMethod) pmIt.next();
 				Util.out.println(pm);
 			}
 		}
