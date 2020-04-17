@@ -59,6 +59,51 @@ public class TextReader {
 		return ret;
 	}
 
+	/** Read a set of polymorphic call sites from a text file */
+	public Polymorphic readPolymorphic(InputStream file) throws IOException {
+		BufferedReader in = new BufferedReader(new InputStreamReader(file, "UTF-8"));
+		Polymorphic ret = new Polymorphic();
+
+		while (true) {
+			String line = in.readLine();
+			if (line == null) {
+				break;
+			}
+
+			if (line.equals(Util.ClassTag)) {
+				String id = in.readLine();
+				String pkg = in.readLine();
+				String name = in.readLine();
+
+				ProbeClass cls = ObjectManager.v().getClass(pkg, name);
+				nodeToClass.put(id, cls);
+
+			} else if (line.equals(Util.MethodTag)) {
+				String id = in.readLine();
+				String name = in.readLine();
+				String signature = in.readLine();
+				String cls = in.readLine();
+
+				ProbeMethod m = ObjectManager.v().getMethod(nodeToClass.get(cls), name, signature);
+				nodeToMethod.put(id, m);
+
+			} else if (line.equals(Util.StmtTag)) {
+				String id = in.readLine();
+				String offset = in.readLine();
+				String method = in.readLine();
+
+				ProbeStmt s = ObjectManager.v().getStmt(nodeToMethod.get(method), Integer.parseInt(offset));
+				nodeToStmt.put(id, s);
+
+			} else {
+				throw new RuntimeException("Unexpected line: " + line);
+			}
+		}
+
+		in.close();
+		return ret;
+	}
+
 	/** Read a call graph from a text file. */
 	public CallGraph readCallGraph(String file) throws IOException {
 		if (file.endsWith("txt.gzip")) {
@@ -73,8 +118,23 @@ public class TextReader {
 		}
 	}
 
+	/** Read a set of polymorphic call sites from a text file */
+	public Polymorphic readPolymorphic(String file) throws IOException {
+		if (file.endsWith("txt.gzip")) {
+			return readPolymorphic(new GZIPInputStream(new FileInputStream(file)));
+		} else if (file.endsWith("txt")) {
+			return readPolymorphic(new FileInputStream(file));
+		} else if (file.endsWith("gxl.gzip") || file.endsWith("gxl")) {
+			throw new IOException(
+					"No longer using GXL as file format. It generates large files. We recommend using txt.gzip instead.");
+		} else {
+			throw new IOException("undefined file extension.");
+		}
+	}
+
 	/* End of public methods. */
 
 	private Map<String, ProbeClass> nodeToClass = new HashMap<String, ProbeClass>();
 	private Map<String, ProbeMethod> nodeToMethod = new HashMap<String, ProbeMethod>();
+	private Map<String, ProbeStmt> nodeToStmt = new HashMap<String, ProbeStmt>();
 }

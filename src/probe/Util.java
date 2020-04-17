@@ -14,6 +14,7 @@ public class Util {
 	public static final String ClassTag = "CLASS";
 	public static final String EntrypointTag = "ENTRYPOINT";
 	public static final String EdgeTag = "CALLEDGE";
+	public static final String StmtTag = "STATEMENT";
 
 	public static final PrintStream out = init();
 

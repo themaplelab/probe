@@ -30,11 +30,22 @@ public class PolymorphicInfo {
 
         Polymorphic a;
         try {
-            try {
-                a = new GXLReader().readPolymorphic(new FileInputStream(filename));
-            } catch( RuntimeException e ) {
+            if (filename.endsWith("txt.gzip")) {
+                a = new TextReader().readPolymorphic(new GZIPInputStream(new FileInputStream(filename)));
+            } else if (filename.endsWith("txt")) {
+                a = new TextReader().readPolymorphic(new FileInputStream(filename));
+            } else if (filename.endsWith("gxl.gzip")) {
                 a = new GXLReader().readPolymorphic(new GZIPInputStream(new FileInputStream(filename)));
+            } else if (filename.endsWith("gxl")) {
+                a = new GXLReader().readPolymorphic(new FileInputStream(filename));
+            } else {
+                throw new IOException("undefined file extension.");
             }
+//            try {
+//                a = new GXLReader().readPolymorphic(new FileInputStream(filename));
+//            } catch( RuntimeException e ) {
+//                a = new GXLReader().readPolymorphic(new GZIPInputStream(new FileInputStream(filename)));
+//            }
         } catch( IOException e ) {
             throw new RuntimeException( "caught IOException "+e );
         }
