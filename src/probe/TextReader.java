@@ -93,7 +93,7 @@ public class TextReader {
 				String method = in.readLine();
 
 				ProbeStmt s = ObjectManager.v().getStmt(nodeToMethod.get(method), Integer.parseInt(offset));
-				nodeToStmt.put(id, s);
+				ret.stmts().add(s);
 
 			} else {
 				throw new RuntimeException("Unexpected line: " + line);
