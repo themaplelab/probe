@@ -41,11 +41,6 @@ public class PolymorphicInfo {
             } else {
                 throw new IOException("undefined file extension.");
             }
-//            try {
-//                a = new GXLReader().readPolymorphic(new FileInputStream(filename));
-//            } catch( RuntimeException e ) {
-//                a = new GXLReader().readPolymorphic(new GZIPInputStream(new FileInputStream(filename)));
-//            }
         } catch( IOException e ) {
             throw new RuntimeException( "caught IOException "+e );
         }

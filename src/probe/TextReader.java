@@ -136,5 +136,4 @@ public class TextReader {
 
 	private Map<String, ProbeClass> nodeToClass = new HashMap<String, ProbeClass>();
 	private Map<String, ProbeMethod> nodeToMethod = new HashMap<String, ProbeMethod>();
-	private Map<String, ProbeStmt> nodeToStmt = new HashMap<String, ProbeStmt>();
 }
