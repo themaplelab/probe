@@ -54,6 +54,24 @@ public class TextWriter {
 		file.close();
 		out.close();
 	}
+
+	/** Write a set of polymorphic invoke instructions to a text file. */
+	public void write(Polymorphic poly, OutputStream file) throws IOException {
+		PrintWriter out = new PrintWriter(new OutputStreamWriter(file, "UTF-8"), true);
+
+		initializeMaps();
+
+		poly.stmts().forEach(s -> addStmt((ProbeStmt) s));
+
+		assignIDs();
+
+		outputClasses(out);
+		outputMethods(out);
+		outputStmts(out);
+
+		file.close();
+		out.close();
+	}
 	
 	/** Read a call graph from a text file. */
 	public void write(CallGraph cg, String file) throws IOException {
@@ -80,6 +98,11 @@ public class TextWriter {
 	private Set<ProbeFieldSet> fieldsets;
 	private Map<Object, Integer> idMap;
 
+	private void addStmt( ProbeStmt s ) {
+		stmts.add(s);
+		addMethod( s.method() );
+	}
+
 	private void addMethod(ProbeMethod m) {
 		methods.add(m);
 		addClass(m.cls());
@@ -87,6 +110,11 @@ public class TextWriter {
 
 	private void addClass(ProbeClass c) {
 		classes.add(c);
+	}
+
+	private String getId(ProbeStmt s) {
+		Integer id = idMap.get(s);
+		return "id" + id.toString();
 	}
 
 	private String getId(ProbeMethod m) {
@@ -124,6 +152,19 @@ public class TextWriter {
 		out.println(m.name());
 		out.println(m.signature());
 		out.println(getId(m.cls()));
+	}
+
+	private void outputStmts(PrintWriter out) {
+		for (ProbeStmt s : stmts) {
+			outputStmt(out, s);
+		}
+	}
+
+	private void outputStmt(PrintWriter out, ProbeStmt s) {
+		out.println(Util.StmtTag);
+		out.println(getId(s));
+		out.println(s.offset());
+		out.println(getId(s.method()));
 	}
 
 	private void initializeMaps() {
